@@ -1,0 +1,217 @@
+/* pages/emoji/emoji.wxss */
+page {
+  background-color: #f9f9f9;
+}
+.title-area {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 686rpx;
+  margin: 50rpx auto 0;
+}
+.title-input {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 56rpx;
+  color: #333333;
+}
+.title-placeholder {
+  font-size: 16px;
+  font-weight: normal;
+  color: #cacaca;
+}
+.title-left-num {
+  margin-left: 8rpx;
+  font-size: 12px;
+  color: #828282;
+}
+.line1 {
+  margin: 24rpx auto 32rpx;
+  width: 686rpx;
+  height: 1rpx;
+  background-color: #dfdfdf;
+}
+.emoji-container {
+  width: 686rpx;
+  height: 600rpx;
+  margin: 0 auto 20rpx;
+  display: flex;
+  flex-flow: row wrap;
+  align-content: flex-start;
+  justify-content: space-around;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 20px rgba(217, 217, 217, 0.25);
+  border-radius: 10px;
+}
+.cursor {
+  position: absolute;
+  right: 0;
+  width: 4rpx;
+  height: 52rpx;
+  background-color: #57BE6B;
+  animation: 1s van-cursor-flicker infinite;
+}
+.cursor-sup-container {
+  width: 4rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+}
+.cursor-sup {
+  width: 4rpx;
+  height: 52rpx;
+  background-color: #57BE6B;
+  animation: 1s van-cursor-flicker infinite;
+}
+@keyframes van-cursor-flicker {
+  from {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+/* 弹出层 */
+.popup {
+  height: 60%;
+  background: #F9F9F9;
+  box-shadow: 0px -4px 10px rgba(172, 172, 172, 0.25);
+  border-radius: 32rpx 32rpx 0 0;
+}
+.top-bar {
+  width: 686rpx;
+  margin: 24rpx auto 28rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.close-btn {
+  width: 128rpx;
+  height: 32rpx;
+  display: flex;
+  align-items: center;
+}
+.close-icon {
+  width: 28rpx;
+  height: 28rpx;
+}
+.popup-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #828282;
+}
+.save-btn {
+  width: 128rpx;
+  height: 56rpx;
+  background: #5DA34F;
+  border-radius: 28rpx;
+  font-size: 14px;
+  line-height: 56rpx;
+  text-align: center;
+  color: #fff;
+}
+.line2 {
+  width: 100%;
+  height: 1rpx;
+  background-color: #f6f6f6;
+}
+/* 宫格 */
+.emoji-group {
+  margin: auto;
+  width: 710rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.emoji-group-item, .emoji-group-item-active {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30rpx;
+}
+.emoji-group-item-active {
+  background-color: #d8d8d8;
+}
+.emoji-theme-icon {
+  width: 60rpx;
+  height: 60rpx;
+}
+.emoji-theme-title {
+  padding-left: 16rpx;
+  font-size: 12px;
+  line-height: 60rpx;
+  color: #707070;
+  font-weight: 500;
+  background-color: #fff;
+}
+.emoji-picker {
+  width: 100%;
+  height: 220px;
+}
+.emoji-textarea {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-content: flex-start;
+  width: 100%;
+}
+.emoji {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80rpx;
+  height: 80rpx;
+  font-size: 60rpx;
+  line-height: 80rpx;
+  text-align: center;
+}
+/* 底部操作面板 */
+.edit-bar {
+  width: 100%;
+  height: 84rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.left-area {
+  margin-left: 40rpx;
+  width: 252rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.right-area {
+  margin-right: 40rpx;
+  flex: 1;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+.edit-btn {
+  width: 88rpx;
+  height: 48rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 4px rgba(156, 156, 156, 0.25);
+  border-radius:16rpx;
+}
+.edit-icon {
+  width: 36rpx;
+  height: 36rpx;
+}
+.delete-icon {
+  width: 40rpx;
+  height: 40rpx;
+}

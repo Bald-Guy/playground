@@ -1,0 +1,51 @@
+<!--pages/preview/preview.wxml-->
+<view class="contain">
+  <swiper class="swiper" style="width: {{swiperWidth}}px; height: {{swiperHeight}}px;" indicator-dots indicator-color="rgba(203, 205, 207, 1)" 	indicator-active-color="#EC3E47">
+ <block wx:for="{{5}}">
+  <swiper-item>
+    <image class="swiper-image" style="width: {{swiperWidth}}px; height: {{swiperHeight-30}}px;" src="https://s3.bmp.ovh/imgs/2022/05/09/c4fbc9c708ef52be.png"></image>
+  </swiper-item>
+ </block>
+</swiper>
+<view class="title">{{note.title}}</view>
+<view class="body"><text>{{note.body}}</text></view>
+<!-- <rich-text class="body" type="text">{{note.body}}</rich-text> -->
+<view class="date-container">
+  <view class="date-txt">今天 17:22</view>
+  <view class="dislike-btn">
+    <image class="dislike-icon" src="../../images/preview/dislike.png"></image>
+    <text class="dislike-txt">不喜欢</text>
+  </view>
+</view>
+<view class="line"></view>
+<view class="comment-bar">
+  <image class="avatar" src="{{avatarUrl}}"></image>
+  <view class="input-box1">爱评论的人运气都不差 ~</view>
+</view>
+<view class="no-comment-container">
+  <image class="no-comment-icon" src="../../images/preview/no-comment.png"></image>
+</view>
+<view class="no-comment-txt">
+  <text class="txt1">这是一片荒草地，</text>
+  <text class="txt2">点击评论</text>
+</view>
+<view class="block-view"></view>
+<view class="social-container">
+  <view class="input-box2">
+    <image class="pen-icon" src="../../images/preview/pen.png"></image>
+    <text class="input-box2-txt">说点什么...</text>
+  </view>
+  <view class="btn">
+    <image class="btn-icon" src="../../images/preview/like.png"></image>
+    <text class="btn-txt">点赞</text>
+  </view>
+  <view class="btn">
+    <image class="btn-icon" src="../../images/preview/collect.png"></image>
+    <text class="btn-txt">收藏</text>
+  </view>
+  <view class="btn">
+    <image class="btn-icon" src="../../images/preview/comment.png"></image>
+    <text class="btn-txt">评论</text>
+  </view>
+</view>
+</view>

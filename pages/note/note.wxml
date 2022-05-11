@@ -1,0 +1,95 @@
+<!--pages/note/note.wxml-->
+<view class="title-area">
+  <view class="title-input">
+    <input type="text" value="{{titleText}}" placeholder="填写标题会有更多赞哦～" placeholder-class="title-placeholder" maxlength="{{titleMaxlength}}" disabled="{{showDialog}}" 	hold-keyboard="{{true}}" bindinput="titleInput" bindblur="titleInputBlur">
+    <keyboard-accessory style="height: 62px;">
+      <view class="group-title-container" style="width: 100%;height: 60px;border: 1px red solid;display: flex;flex-direction: row;background-color: silver;" bind:touchstart="touchStrat" bind:touchmove="touchMove" bind:touchend="touchEnd">
+        <cover-view class="group-title-item" style="left:{{left}}px" animation="{{animationData}}" bindtap="tap" wx:for="{{6}}">滚动内容{{index}}</cover-view>
+      </view>
+    </keyboard-accessory>
+    </input>
+  </view>
+  <text class="title-left-num">{{titleTxtNum}}</text>
+</view>
+<view class="line"></view>
+<view class="body-area">
+  <textarea 
+    class="body-text"
+    value="{{bodyText}}"
+    focus="{{bodyFocus}}"
+    placeholder="添加正文"
+    show-confirm-bar="{{false}}" 
+    hold-keyboard="true" 
+    placeholder-class="body-placeholder" 
+    disable-default-padding 
+    maxlength="-1" 
+    disabled="{{showDialog}}"
+    bindfocus="bodyInputFocus" 
+    bindinput="bodyInput"
+    bindblur="bodyInputBlur" 
+    bindkeyboardheightchange="keyboardheightchange"
+  ></textarea>
+  <view class="body-left-num">
+    <text>/1000</text>
+    <text style="color: {{bodyTxtNum > 1000 ? '#D7415C' : '#989898'}}">{{bodyTxtNum}}</text>
+  </view>
+</view>
+
+
+<!-- 表情快捷插入工具栏 -->
+<!-- <view class="emoji-group-container" style="bottom: {{keyboardHeight}}px;" hidden="{{!bodyFocus}}" catchtouchmove="onEmojiViewTouchmove">
+  <view class="fold-btn-container">
+    <image class="fold-btn-icon" src="/images/fold-icon.png"></image>
+  </view>
+  <scroll-view style="width: 100%; max-height: 90px;" scroll-y catchtouchmove="true" bindscroll="onEmojiScroll">
+    <view class="list-container">
+      <block wx:for="{{currentEmojiList}}" wx:for-index="emojiIdx" wx:for-item="emojiItem">
+        <view class='emoji-txt' bindtap="insertEmoji" data-emoji="{{emojiItem}}">
+          <text>{{emojiItem}}</text>
+        </view>
+      </block>
+      <view style="flex: 1;"></view>
+    </view>
+  </scroll-view>
+  <scroll-view class="title-container" scroll-x>
+    <block wx:for="{{grouplist}}" wx:for-index="groupIdx" wx:for-item="groupItem">
+      <view class="{{currentGroupIdex == groupIdx ? 'group-title-item-active' : 'group-title-item'}}" bindtap="onGroupTitleClick" data-gidx="{{groupIdx}}" data-list="{{groupItem.list}}">
+        <view class="group-title-txt">{{groupItem.title}}</view>
+      </view>
+    </block>
+  </scroll-view>
+</view> -->
+
+<view class="bottom-area">
+  <view class="btn" bindtap="saveAsDraft">
+    <image class="btn-icon" src="../../images/draft-icon.png"></image>
+    <text class="btn-txt">存草稿</text>
+  </view>
+  <view class="btn" bindtap="copyTitle">
+    <image class="btn-icon" src="../../images/copy-title-icon.png"></image>
+    <text class="btn-txt">复制标题</text>
+  </view>
+  <view class="btn" bindtap="copyBody">
+    <image class="btn-icon" src="../../images/copy-body-icon.png"></image>
+    <text class="btn-txt">复制正文</text>
+  </view>
+  <view class="preview-btn" bindtap="previewNote">预览笔记</view>
+</view>
+
+<van-dialog
+  use-slot
+  width="280"
+  title="确认保存笔记吗?"
+  confirmButtonText="保存"
+  confirm-button-color="#5DA34F"
+  transition="fade"
+  show="{{ showDialog }}"
+  show-cancel-button
+  bind:confirm="confirmSave"
+  bind:cancel="cancelSave"
+  bind:close="onDialogClose"
+>
+  <view style="height:20px"></view>
+</van-dialog>
+
+

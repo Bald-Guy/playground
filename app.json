@@ -1,0 +1,17 @@
+{
+    "pages": [
+
+        "pages/index/index",
+        "pages/note/note",
+        "pages/emoji/emoji",
+        "pages/preview/preview",
+        "pages/playground/playground"
+    ],
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTitleText": "Weixin",
+        "navigationBarTextStyle": "black"
+    },
+    "sitemapLocation": "sitemap.json"
+}

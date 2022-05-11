@@ -1,0 +1,88 @@
+<!--pages/emoji/emoji.wxml-->
+<view class="title-area">
+  <view class="title-input">
+    <input type="text" value="{{groupTitle}}" placeholder="填写emoji分组名称" placeholder-class="title-placeholder" disabled="{{showDialog}}" bindinput="groupTitleInput" bindblur="groupTitleInputBlur"/>
+  </view>
+</view>
+<view class="line1"></view>
+<view class="emoji-container" bindtap="openPopup">
+  <block wx:if="{{showPopup}}">
+    <view class="cursor-sup-container">
+      <view class="cursor-sup" hidden="{{currentIdex != -1}}"></view>
+    </view>
+  </block>
+  <block wx:for="{{choosedEmojiList}}" wx:for-index="cEmojiIdx" wx:for-item="cEmojiItem">
+    <view class="emoji" style="position: relative;">
+      <text>{{cEmojiItem}}</text>
+      <block wx:if="{{showPopup}}">
+        <view class="cursor" hidden="{{currentIdex != cEmojiIdx}}"></view>
+      </block>
+    </view>
+  </block>
+  <view style="flex: 1;"></view>
+</view>
+
+<van-popup
+  show="{{ showPopup }}"
+  overlay="{{ false }}"
+  position="bottom"
+  custom-class="popup"
+  bind:close="onClosePopup"
+>
+  <view class="top-bar">
+    <view class="close-btn" bindtap="closePopup">
+      <image class="close-icon" src="/images/group/close-icon.png"></image>
+    </view>
+    <view class="popup-title">添加表情</view>
+    <view class="save-btn" bindtap="closePopup">保存</view>
+  </view>
+  <view class="line2"></view>
+
+  <view class="emoji-group">
+    <block wx:for="{{themeIconUrlList}}" wx:for-index="urlIdx" wx:for-item="urlItem">
+      <view class="{{curThemeIdx == urlIdx ? 'emoji-group-item-active' : 'emoji-group-item'}}" data-themeidx="{{urlIdx}}" bindtap="scrollToTheme">
+        <image class="emoji-theme-icon" src="{{curThemeIdx == urlIdx ? urlItem.cur : urlItem.def}}"></image>
+      </view>
+    </block>
+  </view>
+  <scroll-view 
+    class="emoji-picker" 
+    scroll-y 
+    show-scrollbar="{{false}}" 
+    enhanced
+    scroll-into-view="{{currentTheme}}"
+    scroll-with-animation
+    bind:scroll="onScroll"
+    id="scroller"
+  >
+    <block wx:for="{{themeList}}" wx:for-index="themeIdx" wx:for-item="themeItem">
+      <view>
+        <van-sticky id="{{themeItem.id}}" scroll-top="{{ scrollTop }}" offset-top="{{ offsetTop }}" container="{{ container }}">
+          <view class="emoji-theme-title">{{themeItem.title}}</view>
+        </van-sticky>
+      </view>
+      <view class="emoji-textarea">
+        <view class='emoji' wx:for="{{themeItem.emojiList}}" wx:for-idex="emojiIdx" wx:for-item="emojiItem" bindtap="emojiInput" data-emoji="{{emojiItem}}">
+          <text>{{emojiItem}}</text>
+        </view>
+        <view style="flex: 1;"></view>
+      </view>
+    </block>
+  </scroll-view>
+
+  <view class="edit-bar">
+    <view class="left-area">
+      <view class="edit-btn" bindtap="moveLeft">
+        <image class="edit-icon" src="{{currentIdex != -1 ? '/images/group/button/left-icon.png' : '/images/group/button/dis-left-icon.png'}}"></image>
+      </view>
+      <view class="edit-btn" bindtap="moveRight">
+        <image class="edit-icon" src="{{currentIdex != choosedEmojiList.length-1 ? '/images/group/button/right-icon.png' : '/images/group/button/dis-right-icon.png'}}"></image>
+      </view>
+    </view>
+    <view class="right-area">
+      <view class="edit-btn" bindtap="emojiDelete">
+        <image class="edit-icon delete-icon" src="{{choosedEmojiList.length != 0 ? '/images/group/button/delete-icon.png' : '/images/group/button/dis-delete-icon.png'}}"></image>
+      </view>
+    </view>
+  </view>
+</van-popup>

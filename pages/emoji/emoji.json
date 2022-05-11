@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "van-popup": "/components/miniprogram_npm/@vant/weapp/popup/index",
+    "van-sticky": "/components/miniprogram_npm/@vant/weapp/sticky/index"
+  },
+  "navigationBarTitleText": "编辑分组",
+  "navigationBarBackgroundColor": "#f9f9f9",
+  "backgroundColor": "#f9f9f9"
+}

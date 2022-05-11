@@ -1,0 +1,123 @@
+/* pages/note/note.wxss */
+page {
+  /* background-color: #f8f8f8; */
+}
+.title-area {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 686rpx;
+  margin: 50rpx auto 0;
+}
+.title-input {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 56rpx;
+  color: #333333;
+}
+.title-placeholder {
+  font-size: 16px;
+  font-weight: normal;
+  color: #cacaca;
+}
+.title-left-num {
+  margin-left: 8rpx;
+  font-size: 12px;
+  color: #828282;
+}
+.cover-item {
+  width: 40px;
+  height: 40px;
+  margin-left: 20px;
+  background-color: #E9F6EA;
+}
+.cover-item2 {
+  width: 40px;
+  height: 40px;
+  margin-left: 20px;
+  background-color: #85A988;
+}
+.line {
+  margin: 24rpx auto 32rpx;
+  width: 686rpx;
+  height: 1rpx;
+  background-color: #dfdfdf;
+}
+.body-area {
+  margin: auto;
+  width: 686rpx;
+  font-size: 15px;
+  line-height: 50rpx;
+  letter-spacing: 0.3px;
+  color: #363636;
+}
+.body-text {
+  width: 100%;
+  height: 600rpx;
+  /* background-color: #dfdfdf; */
+}
+.body-placeholder {
+  font-size: 14px;
+  color: #cacaca;
+}
+.body-left-num {
+  display: flex;
+  flex-direction: row-reverse;
+  font-size: 14px;
+  line-height: 56rpx;
+  letter-spacing: 0.4px;
+  color: #989898;
+}
+/* 表情工具栏 */
+group-title-container {
+  
+}
+.group-title-item {
+  width: 400rpx;
+  height: 60px;
+  border: 1px red solid;
+  flex-shrink: 0;
+  position: relative;
+}
+/* 底部区域 */
+.bottom-area {
+  width: 686rpx;
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx;
+}
+.btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 88rpx;
+  height: 88rpx;
+}
+.btn-icon {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 24rpx;
+  background-color: #f7f7f7;
+}
+.btn-txt {
+  font-size: 10px;
+  line-height: 10px;
+  color: #989898;
+}
+.preview-btn {
+  width: 350rpx;
+  height: 88rpx;
+  border-radius: 44rpx;
+  background-color: #E93F49;
+  text-align: center;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 88rpx;
+  color: #FFFFFF;
+}

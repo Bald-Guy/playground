@@ -1,0 +1,122 @@
+<!--index.wxml-->
+<page-meta page-style="{{ showMenu ? 'overflow: hidden;' : '' }}" />
+<wxs src="../index/index.wxs" module="tools"></wxs>
+<!-- 自定义顶部栏 -->
+<view class="nav-bar" style="height:{{navBarHeight}}px;">
+  <view class="nav-content" style="height:{{navBarHeight - statusBarHeight}}px">
+    <view class="nav-content-left-btn" bind:tap="openMenu">
+      <image class="nav-content-left-btn-icon" src="../../images/menu-icon.png"></image>
+    </view>
+    <!-- <view class="nav-content-mid-title">Reditor</view> -->
+    <image class="nav-content-logo" src="/images/logo.png"></image>
+  </view>
+</view>
+
+<!-- 内容区域：自定义顶部栏用的fixed定位，会遮盖到下面内容，注意设置好间距 -->
+<view class="body" style="margin-top:{{navBarHeight}}px;">
+  <!-- 笔记列表 -->
+  <scroll-view class="note-list-container" scroll-y show-scrollbar="{{false}}" enhanced style="width: 100%; height: {{scrollViewHeight}}px; padding-top: 6px;">
+    <block wx:for="{{notelist}}" wx:for-index="noteIdx" wx:for-item="noteItem">
+      <view class="note-card" data-idx="{{noteIdx}}" data-note="{{noteItem}}" bindtap="toEditNote">
+        <view class="title-txt">{{noteItem.title}}</view>
+        <view class="body-txt"><text>{{noteItem.body}}</text></view>
+        <view class="bottom">
+          <view class="date-txt">{{tools.time(noteItem.time)}}</view>
+          <view class="delete-btn" data-idx="{{noteIdx}}" catchtap="onClickDeleteNoteBtn">
+            <image class="delete-icon" src="../../images/delete-icon.png"></image>
+          </view>
+        </view>
+      </view>
+    </block>
+    <!-- 占位块 -->
+    <view style="height: 140rpx"></view>
+  </scroll-view>
+</view>
+
+<view class="btn-container" style="bottom: {{bottomSafeHeight + 16}}px">
+  <view class="add-note-btn"bindtap="addNewNote">
+    <image class="add-note-icon" src="../../images/add-note-icon.png"></image>
+  </view>
+</view>
+
+<van-popup
+  show="{{ showMenu }}"
+  lock-scroll
+  position="left"
+  custom-style="height: 100%; width: {{menuLeft - 20}}px; z-index:200; background: #f8f8f8;"
+  bind:close="onCloseMenu"
+>
+
+  <view class="user-info" style="height:{{navBarHeight}}px;">
+    <view class="user-info-content" style="height:{{navBarHeight - statusBarHeight}}px; margin-top: {{userInfoContainerTop}}px;">
+      <block wx:if="{{!hasUserInfo}}">
+        <image bindtap="bindViewTap" class="userinfo-avatar" src="/images/avatar.png" mode="cover"></image>
+        <button class="login-btn" wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 点击登录 </button>
+      </block>
+      <block wx:else>
+        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+      </block>
+    </view>
+  </view>
+  <view class="group-title">表情分组</view>
+  <view class="group-container">
+    <block wx:if="{{grouplist.length == 0}}">
+      <!-- <view class="no-group"></view> -->
+    </block>
+    <block wx:for="{{grouplist}}" wx:for-index="groupIdx" wx:for-item="groupItem">
+      <view class="group-item">
+        <image class="group-icon" src="/images/grounp-icon.png"></image>
+        <text class="group-txt">{{groupItem.title}}</text>
+        <view class="more-btn" data-idx="{{groupIdx}}" data-group="{{groupItem}}" bindtap="onClickMoreBtn">
+          <image class="more-icon" src="../../images/more-icon.png"></image>
+        </view>
+      </view>
+    </block>
+  </view>
+  <view class="add-group-btn" bindtap="onClickAddGroupBtn">
+    <image class="add-group-icon" src="/images/add-group-icon.png"></image>
+  </view>
+</van-popup>
+
+<van-dialog
+  use-slot
+  width="280"
+  title="确认删除该笔记吗?"
+  confirmButtonText="删除"
+  confirm-button-color="#E93F49"
+  transition="fade"
+  show="{{ showNoteDialog }}"
+  show-cancel-button
+  bind:confirm="confirmDeleteNote"
+  bind:cancel="cancelDeleteNote"
+  bind:close="onNoteDialogClose"
+>
+  <view style="height:20px"></view>
+</van-dialog>
+
+<van-dialog
+  use-slot
+  width="280"
+  title="确认删除该分组吗?"
+  confirmButtonText="删除"
+  confirm-button-color="#E93F49"
+  transition="fade"
+  show="{{ showGroupDialog }}"
+  show-cancel-button
+  bind:confirm="confirmDeleteGroup"
+  bind:cancel="cancelDeleteGroup"
+  bind:close="onGroupDialogClose"
+>
+  <view style="height:20px"></view>
+</van-dialog>
+
+<van-action-sheet
+  show="{{ showActionSheet }}"
+  z-index="300"
+  actions="{{ actions }}"
+  cancel-text="取消"
+  bind:select="selectAction"
+  bind:cancel="cancelAction"
+  bind:close="onCloseActionSheet"
+/>
