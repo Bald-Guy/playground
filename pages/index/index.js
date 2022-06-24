@@ -1,164 +1,178 @@
 // index.js
-const Storage = require('../../utils/storage');
-Page({
+const Draft_Handler = require("../note/draft-handler");
+Component({
   data: {
-    statusBarHeight: 0, 
-    navBarHeight: 0, 
-    menuLeft: 0, 
-    bottomSafeHeight: 0,
+    currentPage: 1,           // 当前显示页面，1笔记列表页；2搜索页；3废纸篓
+    hasMidTitle: false,       // 导航栏中间显示 Logo 还是 title
+    bottomSafeHeight: 0,      // 底部安全高度
     scrollViewHeight: 0,      // 滑动区域高度
-    userInfoContainerTop: 0,  // 用户信息区域上边距
-    showMenu: false,
-    showNoteDialog: false,
-    showGroupDialog: false,
-    showActionSheet: false,
-    actions: [
-      {
-        name: '编辑',
-      },
-      {
-        name: '删除',
-      },
-    ],
-    userInfo: {},
-    hasUserInfo: false,
-    canIUseGetUserProfile: false,
+    scrollTop: 0,             // 控制滑动条位置
+    showMenu: false,          // 控制侧边栏的显示&隐藏
+    draft: {},                // 接受从笔记编辑页面的草稿
+    needRefresh: false,
+    needRefresh_note: false,
+    needRefresh_search: false,
+    needRefresh_trash: false,
+    needRefresh_group: false,
   },
-  onLoad(){
-    if (wx.getUserProfile) {
+  methods: {
+    onLoad(){
+      let _this = this;
+      console.log("笔记列表页面加载");
+      this.setUIParm();
       this.setData({
-        canIUseGetUserProfile: true
+        needRefresh: true,
+        needRefresh_trash: true
+      });
+    },
+    onShow() {
+     
+    },
+    // 设置页面元素尺寸
+    setUIParm() {
+      const app = getApp();
+      this.setData({
+        bottomSafeHeight: app.globalData.bottomSafeHeight,
+        scrollViewHeight: app.globalData.contentViewHeight - app.globalData.bottomSafeHeight,   
+      });
+    },
+    // 打开侧边栏
+    openSideBar() {
+      this.setData({ showMenu: true });
+    },
+    onCloseMenu() {
+      this.setData({ showMenu: false });
+    },
+    // 点击添加笔记按钮
+    onClickAddNoteBtn() {
+      let currentPage = this.data.currentPage;
+      let selectedGroup_id = '';
+      if(currentPage == 1) {
+        
+      }
+      if(currentPage == -1) {
+        selectedGroup_id = this.data.selectedGroup_id
+      }
+      wx.navigateTo({
+        url: '../note/note?scene=3&belong=' + selectedGroup_id,
+        events: {
+          acceptDraftInS3: function(draft) {
+            console.log(draft);
+            Draft_Handler.saveDraftInS3(draft);
+          }
+        }
+      })
+    },
+    scrollToTop() {
+      console.log('双击标题栏');
+      this.setData({scrollTop: 0})
+    },
+    onShareAppMessage() {
+
+    },
+    switchToListPage() {
+      this.selectComponent('#side-bar');  // 这行代码是为了修改currentNoteGroup为-1，避免UI上出现两个被选状态同时出现
+      this.setData({ 
+        currentPage: 1,
+        showMenu: false
+      });
+    },
+    switchToSearchPage() {
+      this.selectComponent('#side-bar');
+      this.selectComponent('#search-view');
+      this.setData({ 
+        currentPage: 2,
+        showMenu: false,     
+      });
+    },
+    switchToTrashPage() {
+      this.selectComponent('#side-bar');
+      this.setData({ 
+        currentPage: 3,
+        showMenu: false 
+      });
+    },
+    switchToNoteGroup(e) {
+      console.log(e);
+      this.setData({ 
+        selectedGroup_id: e.detail.note_group._id,
+        pageTitle: e.detail.note_group.name,
+        currentPage: -1,
+        showMenu: false 
+      });
+    },
+    renameGroup(e) {
+      console.log(e);
+      this.setData({ 
+        pageTitle: e.detail.new_name,
+      });
+    },
+    needRefreshTrash() {
+      this.setData({
+        needRefresh_trash: true
+      })
+    },
+    needRefreshNote() {
+      this.setData({
+        needRefresh_note: true
       })
     }
-    this.setUIParm();
   },
-  setUIParm() {
-    let app = getApp();
-    this.setData({
-      statusBarHeight: app.globalData.statusBarHeight,
-      navBarHeight: app.globalData.navBarHeight,
-      scrollViewHeight: app.globalData.contentViewHeight,
-      bottomSafeHeight: app.globalData.bottomSafeHeight,
-      menuLeft: app.globalData.menuLeft,
-      userInfoContainerTop: wx.getMenuButtonBoundingClientRect().top + app.globalData.menuHeight / 2      
-    });
-  },
-  onShow() {
-    this.getEmojiGroupList();
-    this.getNoteList();
-  },
-  openMenu() {
-    this.setData({ showMenu: true });
-  },
-  onCloseMenu() {
-    this.setData({ showMenu: false });
-  },
-  onClickDeleteNoteBtn(e) {
-    this.setData({ 
-      showNoteDialog: true,
-      noteIdx: e.currentTarget.dataset.idx
-   });
-  },
-  confirmDeleteNote(e) {
-    let _this = this;
-    let index = _this.data.noteIdx;
-    let notelist = _this.data.notelist;
-    notelist.splice(index, 1);
-    Storage.setStorage('notelist', notelist);
-    _this.setData({ notelist: notelist });
-  },
-  onClickMoreBtn(e) {
-    let index = e.currentTarget.dataset.idx;
-    let group = e.currentTarget.dataset.group;
-    this.setData({ 
-      showActionSheet: true,
-      groupIdx: index,
-      group: group
-    });
-  },
-  selectAction(e) {
-    console.log(e);
-    let _this = this;
-    let action = e.detail.name;
-    let group = _this.data.group;
-    switch (action) {
-      case "编辑":
-        console.log("用户点击了编辑");
-        _this.toEditEmojiGroup(group);
-        break;
-      case "删除":
-        console.log("用户点击了删除");
-        _this.toDeleteEmojiGroup();
-        break;
-    }
-  },
-  toEditEmojiGroup(group) {
-    let index = this.data.groupIdx;
-    let group_str = JSON.stringify(group);
-    wx.navigateTo({
-      url: '/pages/emoji/emoji?scene=2&index='+ index.toString() + '&group=' + encodeURIComponent(group_str),
-    })
-  },
-  toDeleteEmojiGroup() {
-    this.setData({ showGroupDialog: true });
-  },
-  confirmDeleteGroup() {
-    let _this = this;
-    let index = _this.data.groupIdx;
-    let grouplist = _this.data.grouplist;
-    grouplist.splice(index, 1);
-    Storage.setStorage('grouplist', grouplist);
-    _this.setData({ grouplist: grouplist });
-  },
-  cancelAction() {
-    this.setData({ showActionSheet: false });
-  },
-  onClickAddGroupBtn() {
-    wx.navigateTo({
-      url: '/pages/emoji/emoji?scene=1',
-    })
-  },
-  addNewNote() {
-    wx.navigateTo({
-      url: '../note/note?scene=3',
-    })
-  },
-  toEditNote(e) {
-    console.log("去编辑该条笔记");
-    let index = e.currentTarget.dataset.idx;
-    let note_str = JSON.stringify(e.currentTarget.dataset.note);
-    wx.navigateTo({
-      url: '../note/note?scene=4&index=' + index.toString() + '&note=' + encodeURIComponent(note_str),
-    })
-  },
-  onCloseActionSheet() {
-    this.setData({ showActionSheet: false });
-  },
-  getEmojiGroupList() {
-    let _this = this;
-    Storage.getGroupList().then((grouplist)=>{
-      _this.setData({ grouplist: grouplist });
-    })
-  },
-  getNoteList() {
-    let _this = this;
-    Storage.getNoteList().then((notelist)=>{
-      _this.setData({ notelist: notelist });
-    })
-  },
-  getUserProfile(e) {
-    // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认
-    // 开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
-    wx.getUserProfile({
-      desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-      success: (res) => {
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
-        Storage.setStorage('userInfo', res.userInfo);
-        Storage.setStorage('hasUserInfo', true);
+ 
+  // 数据监听器
+  observers: {
+    'currentPage': function(currentPage) {
+      // 不同的页面展示不同的标题
+      switch(currentPage) {
+        case -1:
+          this.setData({
+            hasMidTitle: true,
+          })
+          break;
+        case 1:
+          this.setData({
+            hasMidTitle: false,
+          })
+          break;
+        case 2:
+          this.setData({
+            hasMidTitle: true,
+            pageTitle: '搜索笔记',
+          })
+          break;
+        case 3:
+          this.setData({
+            hasMidTitle: true,
+            pageTitle: '废纸篓',
+          })
+        default: break;
       }
-    })
-  },
+    },
+    'needRefresh': function(needRefresh) {
+      if(needRefresh) {
+        let currentPage = this.data.currentPage;
+        switch(currentPage) {
+          case 1:
+            this.setData({
+              needRefresh_note: true
+            });
+            break;
+          case -1:
+            this.setData({
+              needRefresh_note: true,
+              needRefresh_group: true
+            });
+            break;
+          case 2:
+            this.setData({
+              needRefresh_note: true,
+              needRefresh_search: true
+            });
+            break;
+          default: break;
+        }
+      }
+      
+    }
+  }
 })

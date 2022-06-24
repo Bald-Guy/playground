@@ -1,0 +1,13 @@
+<!--pages/account/account.wxml-->
+<nav-bar class="nav-bar" icon="/images/back-icon.png" hasMidTitle="{{true}}" title="账号详情" background="#f8f8f8" bind:click-left="onClickBackBtn"></nav-bar>
+
+<button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+  <image class="avatar" src="{{avatarUrl}}"></image>
+</button> 
+
+<view class="nickname-container">
+  <input class="nickname-input" type="nickname" value="{{nickname}}" placeholder="请输入昵称" placeholder-class="nickname-placeholder" bindblur="inputBlur"/>
+</view>
+
+
+

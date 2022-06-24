@@ -1,0 +1,34 @@
+/* components/reditor/action-sheet/note-action-sheet/index.wxss */
+/* 移动笔记提示框 */
+.no-note-group-tips {
+  width: 200px;
+  height: 200px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 200px;
+  color: #919191;
+  font-size: 16px;
+}
+.note-group-item {
+  width: 260px;
+  margin: 10px auto;
+  display: flex;
+  align-items: center;
+}
+.note-group-icon {
+  width: 48rpx;
+  height: 48rpx;
+}
+.note-group-name {
+  font-size: 14px;
+  line-height: 48rpx;
+  color: #919191;
+  margin: 0 20rpx;
+  flex: 1;
+  width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  white-space: nowrap; 
+}

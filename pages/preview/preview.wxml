@@ -1,4 +1,5 @@
 <!--pages/preview/preview.wxml-->
+<nav-bar class="nav-bar" icon="/images/back-icon.png" hasMidTitle="{{true}}" title="预览" background="#ffffff" bind:click-left="onClickBackBtn"></nav-bar>
 <view class="contain">
   <swiper class="swiper" style="width: {{swiperWidth}}px; height: {{swiperHeight}}px;" indicator-dots indicator-color="rgba(203, 205, 207, 1)" 	indicator-active-color="#EC3E47">
  <block wx:for="{{5}}">

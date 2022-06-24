@@ -10,6 +10,9 @@ Page({
     choosedEmojiList: [],
     currentIdex: -1,
     currentTheme: '',
+    showGroupDialog: false,
+    showActionSheet: false,
+    actions: [{name: '编辑',},{name: '删除',}],
     themeIconUrlList: [
       {
         def: "/images/group/theme/face-icon.png",
@@ -133,6 +136,71 @@ Page({
         break;
     }
     this.getElemParm();
+    Storage.getGroupList();
+  },
+  // 获取该用户的所有表情分组
+  getEmojiGroupList() {
+    // Storage.getGroupList().then((grouplist)=>{
+    //   _this.setData({ grouplist: grouplist });
+    // })
+    Database.queryEmojiGroupList(this);
+  },
+  // 准备对已有表情分组进行编辑或删除
+  onClickMoreBtn(e) {
+    let index = e.currentTarget.dataset.idx;
+    let group = e.currentTarget.dataset.group;
+    this.setData({ 
+      showActionSheet: true,
+      groupIdx: index,
+      group: group
+    });
+  },
+  // 选择编辑或删除表情分组
+  selectAction(e) {
+    console.log(e);
+    let _this = this;
+    let action = e.detail.name;
+    let group = _this.data.group;
+    switch (action) {
+      case "编辑":
+        console.log("用户点击了编辑");
+        _this.toEditEmojiGroup(group);
+        break;
+      case "删除":
+        console.log("用户点击了删除");
+        _this.toDeleteEmojiGroup();
+        break;
+    }
+  },
+  // 点击添加表情分组按钮
+  onClickAddGroupBtn() {
+    wx.navigateTo({
+      url: '/pages/emoji/emoji?scene=1',
+    })
+  },
+  onCloseActionSheet() {
+    this.setData({ showActionSheet: false });
+  },
+  toEditEmojiGroup(group) {
+    let index = this.data.groupIdx;
+    let group_str = JSON.stringify(group);
+    wx.navigateTo({
+      url: '/pages/emoji/emoji?scene=2&index='+ index.toString() + '&group=' + encodeURIComponent(group_str),
+    })
+  },
+  toDeleteEmojiGroup() {
+    this.setData({ showGroupDialog: true });
+  },
+  confirmDeleteGroup() {
+    let _this = this;
+    let index = _this.data.groupIdx;
+    let grouplist = _this.data.grouplist;
+    grouplist.splice(index, 1);
+    Storage.setStorage('grouplist', grouplist);
+    _this.setData({ grouplist: grouplist });
+  },
+  cancelAction() {
+    this.setData({ showActionSheet: false });
   },
   groupTitleInput(e) {
     console.log("表情分组名称：", e);
@@ -264,5 +332,8 @@ Page({
   onUnload() {
     console.log("退出页面");
     this.saveGroup();
+  },
+  onShareAppMessage() {
+    
   }
 })

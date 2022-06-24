@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "van-dialog": "/components/miniprogram_npm/@vant/weapp/dialog/index",
+    "van-action-sheet": "/components/miniprogram_npm/@vant/weapp/action-sheet/index"
+  }
+}

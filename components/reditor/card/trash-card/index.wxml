@@ -1,0 +1,11 @@
+<!--components/reditor/note-card/index.wxml-->
+<view class="note-card">
+  <view class="title-txt">{{trashData.title}}</view>
+  <view class="body-txt"><text>{{trashData.body}}</text></view>
+  <view class="bottom">
+    <view class="date-txt">删除于 <text class="date-txt-num">{{delete_time}}</text></view>
+    <view class="delete-btn" catch:tap="onClickMoreBtn">
+      <image class="delete-icon" src="/images/dot3-icon.png"></image>
+    </view>
+  </view>
+</view>

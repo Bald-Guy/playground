@@ -1,0 +1,100 @@
+/* components/reditor/side-bar/index.wxss */
+/* 侧边栏 */
+.status-bar-block {
+  width: 100%;
+}
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 20px;
+}
+.user-info {
+  flex: 1;
+  width: 0;
+  padding-right: 8px;
+  display: flex;
+  align-items: center;
+}
+.user-nickname {
+  height: 28px;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 28px;
+  color: #2C2C2C;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  white-space: nowrap; 
+}
+.user-premium-tag {
+  margin-left: 8px;
+  padding: 2px 5px;
+  font-family: 'DIN Alternate';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 14px;
+  color: #FFFFFF;
+  background: #919191;
+  border-radius: 4px;
+}
+.set-btn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.set-icon {
+  width: 23px;
+  height: 23px;
+}
+.view-item {
+  height: 29px;
+  display: flex;
+  align-items: center;
+  margin: 4px 20px;
+}
+.view-item-active {
+  background-color: #eaeaea;
+  border-radius: 8px;
+}
+.view-icon {
+  margin-left: 9px;
+  width: 20px;
+  height: 20px;
+}
+.view-name {
+  flex: 1;
+  width: 0;
+  margin-left: 8px;
+  font-size: 14px;
+  line-height: 20px;
+  color: #919191;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  white-space: nowrap; 
+}
+.note-group-manage-title {
+  margin-left: 20px;
+  margin-top: 20px;
+  font-size: 12px;
+  line-height: 26px;
+  letter-spacing: 0.4px;
+  color: #F8B644;
+}
+.bottom-bar {
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding-left: 20px;
+  padding-bottom: 10px;
+}
+.add-ng-btn {
+  width: 30px;
+  height: 30px;
+}
+.group-name-input {
+  margin: 20px;
+}

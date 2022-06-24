@@ -1,7 +1,6 @@
 // pages/preview/preview.js
 const Storage = require('../../utils/storage');
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -9,13 +8,14 @@ Page({
     note: {},
     swiperWidth: 0,
     swiperHeight: 0,
-    avatarUrl: null
+    avatarUrl: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    let _this = this;
     let note_str = decodeURIComponent(options.note);
     console.log(note_str)
     let note = JSON.parse(note_str);
@@ -24,6 +24,13 @@ Page({
       note: note
     })
     this.setUIParm();
+    wx.getStorage({
+      key: 'avatarUrl',
+      success(res){
+        console.log(res)
+        _this.setData({ avatarUrl: res.data })
+      }
+    })
   },
   setUIParm() {
     let app = getApp();
@@ -31,11 +38,15 @@ Page({
     let systemInfo = wx.getSystemInfoSync();
     this.setData({
       swiperWidth: systemInfo.windowWidth,
-      swiperHeight: systemInfo.windowWidth * 4/3 + 30
+      swiperHeight: systemInfo.windowWidth * 4/3 + 30,
+      navBarHeight: app.globalData.navBarHeight,
     });
-    Storage.getStorage('userInfo').then((userInfo)=>{
-      _this.setData({ avatarUrl: userInfo.avatarUrl });
-    })
+    // Storage.getStorage('userInfo').then((userInfo)=>{
+    //   _this.setData({ avatarUrl: userInfo.avatarUrl });
+    // })
+  },
+  onClickBackBtn() {
+    wx.navigateBack();
   },
 
   /**

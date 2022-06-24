@@ -1,69 +1,52 @@
 <!--pages/note/note.wxml-->
+<nav-bar class="nav-bar" icon="/images/back-icon.png" hasMidTitle="{{true}}" title="编辑笔记" background="#ffffff" bind:click-left="onClickBackBtn"></nav-bar>
 <view class="title-area">
   <view class="title-input">
-    <input type="text" value="{{titleText}}" placeholder="填写标题会有更多赞哦～" placeholder-class="title-placeholder" maxlength="{{titleMaxlength}}" disabled="{{showDialog}}" 	hold-keyboard="{{true}}" bindinput="titleInput" bindblur="titleInputBlur">
-    <keyboard-accessory style="height: 62px;">
-      <view class="group-title-container" style="width: 100%;height: 60px;border: 1px red solid;display: flex;flex-direction: row;background-color: silver;" bind:touchstart="touchStrat" bind:touchmove="touchMove" bind:touchend="touchEnd">
-        <cover-view class="group-title-item" style="left:{{left}}px" animation="{{animationData}}" bindtap="tap" wx:for="{{6}}">滚动内容{{index}}</cover-view>
-      </view>
-    </keyboard-accessory>
-    </input>
+    <!-- 标题输入框 -->
+    <input 
+      type="text" 
+      value="{{titleText}}" 
+      focus="{{titleFocus}}" 
+      placeholder="填写标题会有更多赞哦～" 
+      placeholder-class="title-placeholder" 
+      maxlength="40" 
+      disabled="{{(showDialog||showDraftDialog||showActionSheet)}}" 	
+      bindfocus="titleInputFocus"
+      bindinput="titleInput" 
+      bindblur="titleInputBlur"
+    ></input>
   </view>
-  <text class="title-left-num">{{titleTxtNum}}</text>
+  <text class="title-left-num" style="color: {{titleTextWordCount > 20 ? '#D7415C' : '#828282'}}">{{titleTextWordCount}}</text>
 </view>
 <view class="line"></view>
 <view class="body-area">
+  <!-- 正文输入框 -->
   <textarea 
     class="body-text"
+    style="height: {{textareaHeight}}px;"
     value="{{bodyText}}"
     focus="{{bodyFocus}}"
     placeholder="添加正文"
-    show-confirm-bar="{{false}}" 
-    hold-keyboard="true" 
+    cursor-spacing="10"
     placeholder-class="body-placeholder" 
     disable-default-padding 
     maxlength="-1" 
-    disabled="{{showDialog}}"
+    disabled="{{(showDialog||showDraftDialog||showActionSheet)}}"
     bindfocus="bodyInputFocus" 
     bindinput="bodyInput"
     bindblur="bodyInputBlur" 
-    bindkeyboardheightchange="keyboardheightchange"
   ></textarea>
   <view class="body-left-num">
     <text>/1000</text>
-    <text style="color: {{bodyTxtNum > 1000 ? '#D7415C' : '#989898'}}">{{bodyTxtNum}}</text>
+    <text style="color: {{bodyTextWordCount > 1000 ? '#D7415C' : '#989898'}}">{{bodyTextWordCount}}</text>
   </view>
 </view>
 
-
-<!-- 表情快捷插入工具栏 -->
-<!-- <view class="emoji-group-container" style="bottom: {{keyboardHeight}}px;" hidden="{{!bodyFocus}}" catchtouchmove="onEmojiViewTouchmove">
-  <view class="fold-btn-container">
-    <image class="fold-btn-icon" src="/images/fold-icon.png"></image>
-  </view>
-  <scroll-view style="width: 100%; max-height: 90px;" scroll-y catchtouchmove="true" bindscroll="onEmojiScroll">
-    <view class="list-container">
-      <block wx:for="{{currentEmojiList}}" wx:for-index="emojiIdx" wx:for-item="emojiItem">
-        <view class='emoji-txt' bindtap="insertEmoji" data-emoji="{{emojiItem}}">
-          <text>{{emojiItem}}</text>
-        </view>
-      </block>
-      <view style="flex: 1;"></view>
-    </view>
-  </scroll-view>
-  <scroll-view class="title-container" scroll-x>
-    <block wx:for="{{grouplist}}" wx:for-index="groupIdx" wx:for-item="groupItem">
-      <view class="{{currentGroupIdex == groupIdx ? 'group-title-item-active' : 'group-title-item'}}" bindtap="onGroupTitleClick" data-gidx="{{groupIdx}}" data-list="{{groupItem.list}}">
-        <view class="group-title-txt">{{groupItem.title}}</view>
-      </view>
-    </block>
-  </scroll-view>
-</view> -->
-
-<view class="bottom-area">
-  <view class="btn" bindtap="saveAsDraft">
+<!-- 底部区域 -->
+<view class="bottom-area" style="margin-bottom: {{bottomSafeHeight}}px;">
+  <view class="btn" bindtap="onClickSaveBtn">
     <image class="btn-icon" src="../../images/draft-icon.png"></image>
-    <text class="btn-txt">存草稿</text>
+    <text class="btn-txt">保存</text>
   </view>
   <view class="btn" bindtap="copyTitle">
     <image class="btn-icon" src="../../images/copy-title-icon.png"></image>
@@ -73,8 +56,27 @@
     <image class="btn-icon" src="../../images/copy-body-icon.png"></image>
     <text class="btn-txt">复制正文</text>
   </view>
-  <view class="preview-btn" bindtap="previewNote">预览笔记</view>
+  <view class="btn" bindtap="filterText">
+    <image class="btn-icon" src="../../images/filter-icon.png"></image>
+    <text class="btn-txt">内容过滤</text>
+  </view>
+  <view class="preview-btn" bindtap="onClickPreviewBtn">预览笔记</view>
 </view>
+
+<van-dialog
+  width="280"
+  message="你有之前尚未保存的草稿\n是否恢复?"
+  confirmButtonText="继续编辑"
+  cancelButtonText="丢弃草稿"
+  confirm-button-color="#5DA34F"
+  transition="fade"
+  show="{{ showDraftDialog }}"
+  show-cancel-button
+  bind:confirm="continueEdit"
+  bind:cancel="discardDraft"
+  bind:close="onDraftDialogClose"
+>
+</van-dialog>
 
 <van-dialog
   use-slot
@@ -91,5 +93,16 @@
 >
   <view style="height:20px"></view>
 </van-dialog>
+
+<van-action-sheet
+  show="{{ showActionSheet }}"
+  z-index="300"
+  actions="{{ actions }}"
+  description="要返回编辑吗？"
+  cancel-text="取消"
+  bind:select="selectAction"
+  bind:cancel="cancelAction"
+  bind:close="onCloseActionSheet"
+/>
 
 

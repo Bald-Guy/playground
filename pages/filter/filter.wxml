@@ -1,0 +1,53 @@
+<!--pages/filter/filter.wxml-->
+<nav-bar icon="/images/back-icon.png" hasMidTitle="{{false}}" title="{{pageTitle}}" background="#ffffff" bind:click-left="onClickBackBtn" bind:double-tap="scrollToTop">
+  <view slot="mid" class="segment">
+    <text class="segment-item {{currentPage == 1 ? 'segment-item_active' : ''}}" bindtap="switchToBodyPage">正文</text>
+    <text class="segment-item {{currentPage == 2 ? 'segment-item_active' : ''}}" bindtap="switchToTitlePage">标题</text>
+  </view>
+</nav-bar>
+<!-- 正文过滤 -->
+<view hidden="{{currentPage != 1}}">
+  <view class="body-area-input">
+    <textarea class="body-input" style="height: {{bodyTextHeight}}px;" value="{{bodyText}}" maxlength="-1" bindinput="bodyInput"></textarea>
+    <view class="bottom-container">
+      <view class="filter-btn" bindtap="filterBody">过滤</view>
+      <view>
+        <text>{{bodyTextWordCount}}/</text>
+        <text>1000</text>
+      </view>
+    </view>
+  </view>
+  <view class="body-area-output">
+    <editor id="editor_body" class="ql-container_body" style="height: {{bodyTextHeight}}px; min-height: {{bodyTextHeight}}px;" read-only="{{true}}" bindready="bodyEditorReady"></editor>
+    <view class="bottom-container">
+      <view class="empty-block"></view>
+      <view>
+        <text>{{sensitiveWordCount_body}}/</text>
+        <text>{{bodyTextWordCount}}</text>
+      </view>
+    </view>
+  </view>
+</view>
+<!-- 标题过滤 -->
+<view hidden="{{currentPage != 2}}">
+  <view class="body-area-input">
+    <textarea class="body-input" style="height: {{titleTextHeight}}px;" value="{{titleText}}" maxlength="40" bindinput="titleInput"></textarea>
+    <view class="bottom-container">
+      <view class="filter-btn" bindtap="filterTitle">过滤</view>
+      <view>
+        <text>{{titleTextWordCount}}/</text>
+        <text>20</text>
+      </view>
+    </view>
+  </view>
+  <view class="body-area-output">
+    <editor id="editor_title" class="ql-container_body" style="height: {{titleTextHeight}}px; min-height: {{titleTextHeight}}px;" read-only="{{true}}" bindready="titleEditorReady"></editor>
+    <view class="bottom-container">
+      <view class="empty-block"></view>
+      <view>
+        <text>{{sensitiveWordCount_title}}/</text>
+        <text>{{titleTextWordCount}}</text>
+      </view>
+    </view>
+  </view>
+</view>

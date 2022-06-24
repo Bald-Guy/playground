@@ -1,0 +1,44 @@
+/* pages/account/account.wxss */
+page {
+  background-color: #f8f8f8;
+}
+.avatar-wrapper {
+  padding: 0;
+  width: 56px !important;
+  border-radius: 8px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  background: none !important;
+}
+.avatar-wrapper::after {
+  border: none;
+}
+.avatar {
+  display: block;
+  width: 56px;
+  height: 56px;
+}
+.nickname-container {
+  width: 686rpx;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nickname-input {
+  width: 260rpx;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 56rpx;
+  text-align: center;
+  color: #2c2c2c;
+}
+.nickname-placeholder {
+  font-size: 16px;
+  font-weight: normal;
+  color: #cacaca;
+}
+
+
+
+

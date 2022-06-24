@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "van-search": "/components/miniprogram_npm/@vant/weapp/search"
+  }
+}

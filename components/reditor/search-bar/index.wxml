@@ -1,0 +1,14 @@
+<!--components/reditor/search-bar/search-bar.wxml-->
+<van-search 
+  custom-class="search-container"
+  field-class="search-bar"
+  input-class="search-input"
+  value="{{ value }}" 
+  placeholder="搜索"
+  placeholder-style="search-input-placeholder" 
+  background="#f9f9f9"
+  maxlength="40"
+  left-icon="/images/search-icon.png"
+  bind:search="search"
+  bind:change="onChange"
+/>

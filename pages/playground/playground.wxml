@@ -1,5 +1,11 @@
 <!--pages/playground/playground.wxml-->
-<text>pages/playground/playground.wxml</text>
-<cover-view style="width:100%;height:60px;border:1px red solid;display: flex;flex-direction: row;background-color: silver;" bind:touchstart="touchStrat" bind:touchmove="touchMove" bind:touchend="touchEnd">
-  <cover-view class="group-title-item1" animation="{{animationData}}" wx:for="{{6}}" bind:tap="tap">滚动内容{{index}}</cover-view>
-</cover-view>
+<!-- <editor id="editor" placeholder="添加正文" bindinput="textInput" bindblur="textBlur" bindstatuschange="onStatusChange" bindready="onEditorReady"></editor> -->
+<textarea placeholder="添加正文" value="{{text}}" bindinput="textInput" bindblur="textBlur" bindstatuschange="onStatusChange" bindready="onEditorReady"></textarea>
+<!-- <button bindtap="filter">过滤</button> -->
+<button bindtap="empty">清空</button>
+<button bindtap="extract">提取</button>
+<!-- <button bindtap="getText">回收</button> -->
+<!-- <text>{{text}}</text> -->
+<block wx:for="{{ke}}">
+  <view>{{item.word}}</view>
+</block>

@@ -1,0 +1,91 @@
+<!--components/reditor/side-bar/index.wxml-->
+<van-popup
+  show="{{ showMenu }}"
+  lock-scroll
+  position="left"
+  custom-style="height: 100%; width: {{sideBarWidth}}px; max-width: 250px; z-index:200; background: #f8f8f8;"
+  bind:close="onCloseSideBar"
+>
+  <view class="status-bar-block" style="height: {{statusBarHeight}}px;"></view>
+  <view class="top-bar" style="height: {{navBarHeight}}px;">
+    <view class="user-info">
+      <view class="user-nickname">{{nickname}}</view>
+      <view class="user-premium-tag">PRO</view>
+    </view>
+    <view class="set-btn" bindtap="navigateToSetPage">
+      <image class="set-icon" src="/images/set-icon.png"></image>
+    </view>
+  </view>
+  <scroll-view style="width: 100%; height: {{scrollViewHeight}}px;" scroll-y>
+    <view style="height: 36rpx;"></view>
+    <view class="view-item {{currentPage == 1 ? 'view-item-active' : ''}}" bindtap="switchToListPage">
+      <image class="view-icon" src="/images/note-icon.png"></image>
+      <text class="view-name">笔记</text>
+    </view>
+    <view class="view-item {{currentPage == 2 ? 'view-item-active' : ''}}" bindtap="switchToSearchPage">
+      <image class="view-icon" src="/images/search-icon.png"></image>
+      <text class="view-name">搜索全部</text>
+    </view>
+    <view class="view-item {{currentPage == 3 ? 'view-item-active' : ''}}" bindtap="switchToTrashPage">
+      <image class="view-icon" src="/images/trash-icon.png"></image>
+      <text class="view-name">废纸篓</text>
+    </view>
+    <view class="note-group-manage-title" wx:if="{{note_group.length > 0}}">笔记管理</view>
+    <block wx:for="{{note_group}}" wx:for-index="ngIndex" wx:for-item="ngItem" wx:key="_id">
+      <view class="view-item {{currentNoteGroup == ngIndex ? 'view-item-active' : ''}}" data-index="{{ngIndex}}" data-group="{{ngItem}}" bindtap="switchToNoteGroup">
+        <image class="view-icon" src="/images/file-icon.png"></image>
+        <text class="view-name" style="flex: 1; margin-right: 20rpx;">{{ngItem.name}}</text>
+        <image class="view-icon" style="margin: 0 20rpx 0 0;" src="/images/dot3-icon.png" hidden="{{currentNoteGroup != ngIndex}}" catchtap="onClickEditGroupBtn"></image>
+      </view>
+    </block>
+  </scroll-view>
+
+  <view class="bottom-bar" style="margin-bottom: {{bottomSafeHeight}}px;">
+    <image class="add-ng-btn" src="/images/add-ng-icon.png" bindtap="newNoteGroup"></image>
+  </view>
+</van-popup>
+
+<van-dialog
+  use-slot
+  show="{{ showDialog }}"
+  show-cancel-button
+  confirmButtonText="保存"
+  confirm-button-color="{{isValidGroupName ? '#5DA34F' : '#919191'}}"
+  bind:close="onCloseDialog"
+  bind:confirm="saveNoteGroup"
+  bind:cancel="cancelNewNoteGroup"
+>
+  <input 
+    class="group-name-input" 
+    type="text" 
+    value="{{groupName}}"
+    placeholder="填写分组名称" 
+    maxlength="20"
+    bindinput="noteGroupNameInput"
+  />
+</van-dialog>
+
+<van-action-sheet
+  show="{{ showActionSheet }}"
+  z-index="300"
+  actions="{{ actions }}"
+  cancel-text="取消"
+  bind:select="selectAction"
+  bind:cancel="cancelAction"
+  bind:close="onCloseActionSheet"
+/>
+
+<van-dialog
+  width="280"
+  title="确认删除该分组吗?"
+  message="该分组下的笔记将被移到默认的“笔记”中"
+  confirmButtonText="删除"
+  confirm-button-color="#E93F49"
+  transition="fade"
+  show="{{ showGroupDialog }}"
+  show-cancel-button
+  bind:confirm="confirmDeleteGroup"
+  bind:cancel="cancelDeleteGroup"
+  bind:close="onGroupDialogClose"
+></van-dialog>
+

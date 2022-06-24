@@ -1,0 +1,18 @@
+<!--components/reditor/view/note-view/index.wxml-->
+<view wx:if="{{show}}">
+  <reditor-scroll-view 
+  scrollViewHeight="{{scrollViewHeight}}" 
+  scrollTop="{{scrollTop}}" 
+  enabled="{{true}}" 
+  emptyBlockHeight="{{184}}"
+  triggered="{{triggered}}" 
+  showLoading="{{showLoading}}"
+  bind:on-refresh="onRefresh" 
+  bind:reach-bottom="reachBottom">
+    <block wx:for="{{notes}}" wx:for-index="noteIndex" wx:for-item="noteItem" wx:key="_id">
+      <note-card noteIndex="{{noteIndex}}" noteData="{{noteItem}}" bind:more="onClickMoreBtn"></note-card>
+    </block>
+  </reditor-scroll-view>
+</view>
+
+<note-action-sheet show="{{showActionSheet}}" noteIndex="{{noteIndex}}" noteData="{{noteData}}" bind:need-refresh="needRefresh"></note-action-sheet>

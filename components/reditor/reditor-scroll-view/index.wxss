@@ -1,0 +1,11 @@
+/* components/reditor/reditor-scroll-view/index.wxss */
+@import "/templates/loading/index.wxss";
+/* 滑动列表 */
+.note-list-container {
+  width: 100%;
+  overflow-anchor: auto;
+}
+/* 加载动画容器 */
+.loading-container {
+  margin-top: 50rpx;
+}

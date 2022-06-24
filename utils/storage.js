@@ -62,13 +62,13 @@ function getNoteList () {
     wx.getStorage({
       key: 'notelist',
       success (res) {
-        console.log("获取表情分组列表缓存成功，反馈日志：", res);
+        console.log("获取笔记列表缓存成功，反馈日志：", res);
         resolve(res.data);
       },
       fail (err) {
         console.log("获取表情分组列表缓存失败，反馈日志：", err);
-        setStorage('notelist', [{title:"👋你好，小红书创作者",body:"这是一个帮助你更好编辑小红书笔记文本内容的工具，在这里你可以：\n1⃣️拥有更大的编辑空间\n2⃣️提前预览发布后的效果\n3⃣️一键复制粘贴，空行不会丢失\n望使用愉快～如有任何反馈请联系：\n🛰️lht19960624",time: new Date().getTime()}]);
-        resolve([{title:"👋你好，小红书创作者",body:"这是一个帮助你更好编辑小红书笔记文本内容的工具，在这里你可以：\n1⃣️拥有更大的编辑空间\n2⃣️提前预览发布后的效果\n3⃣️一键复制粘贴，空行不会丢失\n望使用愉快～如有任何反馈请联系：\n🛰️lht19960624",time: new Date().getTime()}]);
+        setStorage('notelist', [{title:"👋你好，小红书创作者",body:"这是一个帮助你更好编辑小红书笔记文本内容的工具，在这里你可以：\n1⃣️拥有更大的编辑空间\n2⃣️提前预览发布后的效果\n3⃣️一键复制粘贴，空行不会丢失\n4⃣️自定义表情分组，表情快捷插入\n望使用愉快～如有任何反馈请联系：\n🛰️lht19960624",time: new Date().getTime()}]);
+        resolve([{title:"👋你好，小红书创作者",body:"这是一个帮助你更好编辑小红书笔记文本内容的工具，在这里你可以：\n1⃣️拥有更大的编辑空间\n2⃣️提前预览发布后的效果\n3⃣️一键复制粘贴，空行不会丢失\n4⃣️自定义表情分组，表情快捷插入\n望使用愉快～如有任何反馈请联系：\n🛰️lht19960624",time: new Date().getTime()}]);
       }
     })
   })  

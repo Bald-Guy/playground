@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "reditor-scroll-view": "/components/reditor/reditor-scroll-view",
+    "trash-card": "/components/reditor/card/trash-card",
+    "trash-action-sheet": "/components/reditor/action-sheet/trash-action-sheet"
+  }
+}

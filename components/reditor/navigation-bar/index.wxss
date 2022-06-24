@@ -1,0 +1,49 @@
+.top-area {
+  position: fixed;
+  top: 0;
+  width: 100%; 
+  z-index: 100;
+}
+.nav-bar { 
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.nav-bar-left-btn {
+  position: absolute;
+  left: 0;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  width: 20px;
+  height: 100%;
+}
+.nav-bar-left-btn_hover {
+  animation: hover .2s 1;
+  animation-direction: alternate;
+}
+@keyframes hover {
+  to {
+    opacity: 0.2;
+  }
+}
+.nav-bar-left-btn-icon {
+  width: 20px;
+  height: 32px;
+}
+.nav-bar-title {
+  width: 120px;
+  font-size: 16px;
+  font-weight: bolder;
+  color: #1F1F1F;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis; 
+  white-space: nowrap;
+}
+.nav-bar-logo {
+  width: 220rpx;
+  height: 64rpx;
+}

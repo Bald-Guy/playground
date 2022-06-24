@@ -1,7 +1,10 @@
 {
   "usingComponents": {
     "van-dialog": "/components/miniprogram_npm/@vant/weapp/dialog/index",
-    "van-overlay": "/components/miniprogram_npm/@vant/weapp/overlay/index"
+    "van-overlay": "/components/miniprogram_npm/@vant/weapp/overlay/index",
+    "van-popup": "/components/miniprogram_npm/@vant/weapp/popup/index",
+    "van-action-sheet": "/components/miniprogram_npm/@vant/weapp/action-sheet/index",
+    "nav-bar": "/components/reditor/navigation-bar/index"
   },
-  "navigationBarTitleText": "编辑笔记"
+  "navigationStyle": "custom"
 }

@@ -1,0 +1,52 @@
+<!--components/reditor/action-sheet/note-action-sheet/index.wxml-->
+<!-- 对笔记进行移动或者删除 -->
+<van-action-sheet
+  show="{{ show }}"
+  z-index="300"
+  actions="{{ actions }}"
+  cancel-text="取消"
+  bind:select="selectAction"
+  bind:cancel="cancelAction"
+  bind:close="onCloseActionSheet"
+/>
+
+<!-- 是否确认删除笔记 -->
+<van-dialog
+  use-slot
+  width="280"
+  title="确认删除该笔记吗?"
+  confirmButtonText="删除"
+  confirm-button-color="#E93F49"
+  transition="fade"
+  show="{{ showDeleteDialog }}"
+  show-cancel-button
+  bind:confirm="confirmDelete"
+  bind:cancel="cancelDelete"
+  bind:close="onCloseDeleteDialog"
+>
+  <view style="height:20px"></view>
+</van-dialog>
+
+<!-- 是否确认移动笔记 -->
+<van-dialog
+  use-slot
+  width="280"
+  title="移动笔记到:"
+  transition="fade"
+  show="{{ showMoveDialog }}"
+  showConfirmButton="{{false}}"
+  show-cancel-button
+  bind:cancel="cancelMove"
+  bind:close="onCloseMoveDialog"
+>
+  <scroll-view scroll-y style="height: 200px;">
+    <view class="no-note-group-tips" wx:if="{{note_groups.length == 0}}">无其他可用分组</view>
+    <block wx:for="{{note_groups}}" wx:for-index="ngIndex" wx:for-item="ngItem" wx:key="_id">
+      <view class="note-group-item" data-group="{{ngItem}}" bindtap="confirmMove">
+        <image class="note-group-icon" src="/images/file-icon.png"></image>
+        <text class="note-group-name">{{ngItem.name}}</text>
+      </view>
+    </block>
+  </scroll-view>
+</van-dialog>
+

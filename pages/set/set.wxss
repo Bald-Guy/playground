@@ -1,0 +1,42 @@
+/* pages/set/set.wxss */
+page {
+  background-color: #f8f8f8;
+}
+.set-item {
+  height: 42px;
+  margin-left: 20px;
+  padding-right: 16px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #cfcfcf;
+}
+.set-icon {
+  width: 18px;
+  height: 18px;
+}
+.set-text {
+  margin-left: 16px;
+  font-size: 15px;
+  line-height: 28px;
+  color: #444444;
+}
+.set-desc {
+  margin-right: 20px;
+  font-size: 15px;
+  line-height: 28px;
+  color: #9E9E9E;
+}
+.to-set-icon {
+  width: 12.5px;
+  height: 20px;
+  transform: rotate(180deg);
+}
+.version-info {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-family: 'DIN Alternate';
+  font-size: 15px;
+  color: #9e9e9e;
+}

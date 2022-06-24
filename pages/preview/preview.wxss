@@ -10,24 +10,20 @@
   color:transparent;  
   display:none
 }
-.swiper {
-  /* width: 750rpx;
-  height: 750rpx; */
-}
 /* 默认指示点的样式 */
 .swiper .wx-swiper-dot {
-  width: 12rpx;
-  height: 12rpx;
-  margin: 0 4rpx !important;
+  width: 6px;
+  height: 6px;
+  margin: 0 2px !important;
   background: #cbcdcf;
-  border-radius: 12rpx;
+  border-radius: 6px;
 }
 /* 选中指示点的样式 */
 .swiper .wx-swiper-dot.wx-swiper-dot-active {
-    width: 12rpx;
-    height: 12rpx;
+    width: 6px;
+    height: 6px;
     background: #ec3e47;
-    border-radius: 12rpx;
+    border-radius: 6px;
 }
 .swiper-image {
   /* width: 750rpx;
@@ -37,7 +33,7 @@
 .title {
   width: 686rpx;
   margin: auto;
-  font-weight: 600;
+  font-weight: bold;
   font-size: 18px;
   line-height: 28px;
   letter-spacing: 0.4px;
@@ -70,17 +66,17 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 128rpx;
-  height: 48rpx;
+  width: 64px;
+  height: 24px;
   border: 1px solid #CFCFCF;
   box-sizing: border-box;
   border-radius: 12px;
 }
 .dislike-icon {
-  width: 22rpx;
-  height: 22rpx;
-  margin-left: 12rpx;
-  margin-right: 8rpx;
+  width: 11px;
+  height: 11px;
+  margin-left: 6px;
+  margin-right: 4px;
 }
 .dislike-txt {
   font-weight: 400;
@@ -101,21 +97,21 @@
   flex-direction: row;
 }
 .avatar {
-  width: 72rpx;
-  height: 72rpx;
-  border-radius: 36rpx;
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
   background-color: #CFCFCF;
 }
 .input-box1 {
   flex: 1;
-  height: 72rpx;
-  margin-left: 24rpx;
-  padding-left: 36rpx;
-  border-radius: 36rpx;
+  height: 36px;
+  margin-left: 12px;
+  padding-left: 18px;
+  border-radius: 18px;
   background-color: #f6f6f6;
   font-size: 14px;
   font-weight: 400;
-  line-height: 72rpx;
+  line-height: 36px;
   color: #828282;
 }
 .no-comment-container {
@@ -124,13 +120,13 @@
   justify-content: center;
 }
 .no-comment-icon {
-  width: 78rpx;
-  height: 57rpx;
-  margin: 96rpx auto 0;
+  width: 39px;
+  height: 28.5px;
+  margin: 48px auto 0;
 }
 .no-comment-txt {
   width: 100%;
-  margin-top: 20rpx;
+  margin-top: 10px;
   text-align: center;
   font-weight: 400;
   font-size: 14px;
@@ -150,7 +146,7 @@
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 110rpx;
+  height: 55px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -161,17 +157,17 @@
   display: flex;
   flex: 1;
   align-items: center;
-  margin-left: 32rpx;
-  margin-right: 36rpx;
-  height: 72rpx;
-  border-radius: 36rpx; 
+  margin-left: 16px;
+  margin-right: 18px;
+  height: 36px;
+  border-radius: 18px; 
   background-color: #f6f6f6;
 }
 .pen-icon {
-  width: 24rpx;
-  height: 24rpx;
-  margin-left: 24rpx;
-  margin-right: 20rpx;
+  width: 12px;
+  height: 12px;
+  margin-left: 12px;
+  margin-right: 10px;
 }
 .input-box2-txt {
   width: 136rpx;
@@ -189,12 +185,12 @@
   align-items: center;
 }
 .btn-icon {
-  width: 60rpx;
-  height: 60rpx;
+  width: 30px;
+  height: 30px;
 }
 .btn-txt {
-  margin-left: 4rpx;
-  margin-right: 32rpx;
+  margin-left: 2px;
+  margin-right: 16px;
   font-weight: 600;
   font-size: 14px;
 }

@@ -1,0 +1,24 @@
+<!--components/reditor/view/trash-view/index.wxml-->
+<!-- 废纸篓列表 -->
+<view wx:if="{{show}}">
+  <reditor-scroll-view 
+    scrollViewHeight="{{scrollViewHeight}}" 
+    scrollTop="{{scrollTop}}" 
+    enabled="{{true}}" 
+    emptyBlockHeight="{{40}}"
+    triggered="{{triggered}}"
+    showLoading="{{showLoading}}"
+    bind:on-refresh="onRefresh" 
+    bind:reach-bottom="reachBottom">
+    <view class="tips-container">
+      <image class="tips-icon" src="/images/tips-icon.png"></image>
+      <view class="tips-text">在废纸篓中超过<text class="tips-text-num"> 30 </text>天的笔记将会自动删除</view>
+    </view>
+    <block wx:for="{{trashs}}" wx:for-index="trashIndex" wx:for-item="trashItem" wx:key="_id">
+      <trash-card trashIndex="{{trashIndex}}" trashData="{{trashItem}}" bind:more="onClickMoreBtn"></trash-card>
+    </block>
+  </reditor-scroll-view>
+</view>
+
+<trash-action-sheet show="{{showActionSheet}}" trashIndex="{{trashIndex}}" trashData="{{trashData}}" bind:need-refresh="needRefresh"></trash-action-sheet>
+

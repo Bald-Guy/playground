@@ -1,0 +1,12 @@
+<!--components/reditor/note-card/index.wxml-->
+<view class="note-card" bind:tap="onTapCard">
+  <view class="title-txt">{{noteData.title}}</view>
+  <view class="body-txt"><text>{{noteData.body}}</text></view>
+  <view class="bottom">
+    <view class="date-txt">{{time}}</view>
+    <view class="delete-btn" catch:tap="onClickMoreBtn">
+      <image class="delete-icon" src="/images/dot3-icon.png"></image>
+    </view>
+  </view>
+</view>
+

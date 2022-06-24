@@ -1,287 +1,394 @@
 // pages/note/note.js
 const Storage = require('../../utils/storage');
+const Database = require('../../utils/database');
 const Text_Handler = require('../note/text-handler');
-Page({
+const Draft = require('./draft-handler');
+const db = wx.cloud.database();
+const notesCollection = db.collection('note');
+Component({
   data: {
-    titleText: "",
-    titleMaxlength: -1,
-    bodyText: "",
-    titleTxtNum: 20,
-    bodyTxtNum: 0,
-    bodyFocus: false,
-    showDialog: false,
-    keyboardHeight: -999,
-    animationData: {},
-    x: 0,
-    left: 0
+    titleText: "",            // 标题文本
+    bodyText: "",             // 正文文本
+    textareaHeight: 300,      // 正文文本框高度
+    bottomSafeHeight: 0,
+    titleTextWordCount: 0,    // 标题文本字数
+    bodyTextWordCount: 0,     // 正文文本字数
+    titleFocus: false,        // 标题输入框聚焦
+    bodyFocus: false,         // 正文输入框聚焦
+    showDraftDialog: false,   // 控制恢复草稿的对话框显示&隐藏
+    showDialog: false,        // 控制保存笔记的对话框显示&隐藏
+    showActionSheet: false,   // 控制返回编辑的动作面板显示&隐藏
+    platform: 'android',      // 当下小程序正在运行的平台
+    needSaveDraft: true,
+    actions: [{name: '返回编辑'},{name: '保存并退出'},
+    ],
   },
-  onLoad(options) {
-    let _this = this;
-    console.log(options);
-    // 获取系统信息
-    var systemInfo = wx.getSystemInfoSync();
-    console.log(systemInfo);
-    var textareaHeight = systemInfo.windowHeight - 220;
-    this.setData({
-      textareaHeight: textareaHeight,
-      platform: 'ios'// systemInfo.platform
-    })
-    this.getEmojiGroupList();
-    this.initPageData(options);
-  },
-  initPageData(options) {
-    let _this = this;
-    switch (options.scene) {
-      case "3": // 添加新的笔记
-        _this.setData({ scene: 3 });
-        break;
-      case "4": // 编辑旧的笔记
-        let note_str = decodeURIComponent(options.note);
-        let note = JSON.parse(note_str);
-        _this.setData({
-          scene: 4,
-          noteIdx: parseInt(options.index),
-          titleText: note.title,
-          titleTxtNum: 20 - note.title.length,
-          bodyText: note.body,
-          bodyTxtNum: note.body.length
-        });
-        break;
-    }
-  },
-  titleInput(e) {
-    console.log(e);
-    let value = e.detail.value;
-    console.log(value);
-    console.log(value.length);
-    this.restWordCount(value);
-  },
-  restWordCount(str) {
-    let _this = this;
-    let titleTxtNum = _this.data.titleTxtNum;
-    if (_this.data.platform == 'ios') {
-      let text = Text_Handler.getWordCount_redbook_ios(str).text;
-      let count = Text_Handler.getWordCount_redbook_ios(str).count;
-      
-      let remain_count = Text_Handler.calculateDifference(20, count);
-      _this.setData({ 
-        titleText: text,
-        titleTxtNum: remain_count 
+  methods: {
+    onLoad(options) {
+      let _this = this;
+      console.log(options);
+      let systemInfo = wx.getSystemInfoSync();    // 获取系统信息
+      console.log(systemInfo);
+      this.setUIParm(systemInfo);
+      this.setPlatform();          
+      this.initNoteData(options);
+    },
+    // 设置 UI 参数
+    setUIParm(systemInfo) {
+      let _this = this;
+      let textareaHeight = systemInfo.windowHeight;
+      let query = this.createSelectorQuery();
+      query.selectAll('.nav-bar,.title-area,.body-left-num,.bottom-area').boundingClientRect();
+      query.exec((res)=>{
+        for(let i = 0; i < res[0].length; i++) {
+          textareaHeight -= res[0][i].height;
+        }
+        _this.setData({ textareaHeight: textareaHeight - 100 });  // 100 为留白区域高度
       });
-    }
-    if (_this.data.platform == 'android') {
-      let text = Text_Handler.getWordCount_redbook_android(str);
-      _this.setData({ titleText: text });
-    }
-  },
-  bodyInput(e) {
-    console.log(e);
-    this.setData({
-      bodyText: e.detail.value, 
-      bodyTxtNum: e.detail.value.length 
-    });
-  },
-  insertEmoji(e) {
-    let _this = this;
-    let text = _this.data.bodyText;
-    let emoji = e.currentTarget.dataset.emoji;
-    wx.getSelectedTextRange({
-      complete: res => {
-        let textIndex = res.start;
-        text = text.substring(0, textIndex) + emoji + text.substring(textIndex, text.length);
-        _this.setData({ bodyText: text });
+      let app = getApp();
+      this.setData({
+        bottomSafeHeight: app.globalData.bottomSafeHeight,  
+      });
+    },
+    // 设置正在运行小程序的平台
+    setPlatform() {
+      this.setData({ platform: getApp().globalData.platform });
+    },
+    // 笔记数据初始化
+    initNoteData(options) {
+      let _this = this;
+      _this.setData({belong: options.belong})
+      switch (options.scene) {
+        case "3": // 添加新的笔记
+          _this.setData({ scene: 3 });
+          Draft.checkDraftInS3();
+          break;
+        case "4": // 编辑旧的笔记
+          let note_str = decodeURIComponent(options.note);
+          let note = JSON.parse(note_str);
+          console.log(note)
+          _this.initNoteDataInS4(options.index, note);
+          Draft.checkDraftInS4(note._id);
+          break;
+        default:
+          break;
       }
-    })
-  },
- 
-  bodyInputFocus(e) {
-    this.setData({ 
-      keyboardHeight: e.detail.height,
-      bodyFocus: true, 
-    });
-  },
-  titleInputBlur(e) {
-    this.setData({
-      titleText: e.detail.value
-    })
-  },
-  keyboardheightchange(e) {
-    this.setData({ keyboardHeight: e.detail.height });
-  },
-
-  bodyInputBlur(e) {
-    this.setData({
-      bodyText: e.detail.value,
-      bodyFocus: false
-    })
-  },
-  onEmojiViewTouchmove() {
-    this.setData({
-      bodyFocus: true
-    })
-  },
-
-  getEmojiGroupList() {
-    let _this = this;
-    Storage.getGroupList().then((grouplist)=>{
-      _this.setData({ grouplist: grouplist });
-    })
-  },
-  onGroupTitleClick(e) {
-    let emojiList = e.currentTarget.dataset.list;
-    let gidx = e.currentTarget.dataset.gidx;
-    this.setData({ 
-      currentEmojiList: emojiList,
-      currentGroupIdex: gidx
-    });
-  },
-
-  saveAsDraft() {
-    console.log("点击成功！！！");
-    this.setData({
-      showDialog: true
-    })
-  },
-
-  confirmSave() {
-    let _this = this;
-    this.setData({
-      showDialog: false
-    })
-    let note = {
-      title: _this.data.titleText,
-      body: _this.data.bodyText,
-      time: new Date().getTime()
-    };
-    // 判断是在添加新笔记还是编辑旧笔记
-    switch (_this.data.scene) {
-      case 3:
-        console.log("保存新笔记");
-        if(_this.data.titleText != '' || _this.data.bodyText != '') {
-          Storage.setNoteList(note);
-        }else {
+    },
+    initNoteDataInS4(index, note) {
+      this.setData({
+        scene: 4,
+        noteIdx: parseInt(index),
+        titleText: note.title,
+        bodyText: note.body,
+        noteId: note._id,
+      });
+    },
+    // 继续编辑草稿
+    continueEdit() {
+      Draft.continueEdit();
+    },
+    // 丢弃草稿
+    discardDraft() {
+      Draft.discardDraft();
+    },
+    // 提示是否保存笔记的对话框关闭时触发
+    onDialogClose() {
+      this.setData({ showDialog: false });
+    },
+    titleInput(e) {
+      let value = e.detail.value;
+      this.setData({ titleText: value });
+    },
+    bodyInput(e) {
+      let value = e.detail.value;
+      this.setData({ bodyText: e.detail.value });
+    },
+    titleInputFocus(e) {
+      this.setData({ 
+        titleFocus: true
+      });
+    },
+    bodyInputFocus(e) {
+      this.setData({ 
+        bodyFocus: true
+      });
+    },
+    titleInputBlur(e) {
+      this.setData({
+        titleText: e.detail.value,
+        titleFocus: false
+      })
+    },
+    bodyInputBlur(e) {
+      this.setData({
+        bodyText: e.detail.value,
+        bodyFocus: false
+      })
+    },
+    copyTitle() {
+      var data = this.data.titleText;
+      wx.setClipboardData({
+        data: data,
+        success (res) {
           wx.showToast({
-            title: '内容为空',
+            title: '已复制到剪贴板',
             icon: 'none',
             duration: 800
           })
         }
-        break;
-      case 4:
-        console.log("保存修改过的笔记");
-        if(_this.data.titleText == '' && _this.data.bodyText == '') {
+      })
+    },
+    copyBody() {
+      let char = unescape("\u3164");
+      let data = this.data.bodyText;
+      let data_str = JSON.stringify(data);
+      let new_data_str = data_str.replace(/\\n\\n/g, "\\n"+char+"\\n");
+      wx.setClipboardData({
+        data: JSON.parse(new_data_str),
+        success (res) {
           wx.showToast({
-            title: '内容为空',
+            title: '已复制到剪贴板',
             icon: 'none',
             duration: 800
           })
-        }else {
-          let index = _this.data.noteIdx;
-          Storage.getNoteList().then((notelist)=>{
-            console.log(notelist);
-            notelist.splice(index, 1, note);
-            console.log(notelist);
-            Storage.setStorage('notelist', notelist);
-          })
         }
-        break;
+      })
+    },
+    // 内容过滤
+    filterText() {
+      let _this = this;
+      let note = {
+        title: _this.data.titleText,
+        body: _this.data.bodyText
+      };
+      let note_str = JSON.stringify(note);
+      wx.navigateTo({
+        url: '../filter/filter?note=' + encodeURIComponent(note_str),
+        events: {
+          acceptTitleFromOpenedPage: function(data) {
+            console.log(data);
+            _this.setData({ titleText: data.title });
+          },
+          acceptBodyFromOpenedPage: function(data) {
+            console.log(data);
+            _this.setData({ bodyText: data.body });
+          }
+        }
+      })
+    },
+    onClickPreviewBtn() {
+      let _this = this;
+      let note = {
+        title: _this.data.titleText,
+        body: _this.data.bodyText
+      };
+      let note_str = JSON.stringify(note);
+      wx.navigateTo({
+        url: '../preview/preview?note=' + encodeURIComponent(note_str),
+      })
+    },
+    // 点击返回按钮
+    onClickBackBtn() {
+      switch (this.data.scene) {
+        case 3:
+          this.onClickBackBtnInS3();
+          break;
+        case 4:
+          this.onClickBackBtnInS4();
+          break;
+        default:
+          break;
+      } 
+    },
+    // 在添加新笔记场景中点击【返回】按钮
+    onClickBackBtnInS3() {
+      if(this.checkNullContent()) {
+        this.setData({ needSaveDraft: false });
+        wx.navigateBack();
+      }else {
+        this.setData({ showActionSheet: true })
+      }
+    },
+    // 在编辑旧笔记场景中点击【返回】按钮
+    onClickBackBtnInS4() {
+      if(this.checkNullContent()) {
+        this.setData({ needSaveDraft: false });
+        wx.navigateBack();
+      }else {
+        this.setData({ showActionSheet: true });
+      }
+    },
+    // 点击【返回】按钮 - 进行选择
+    selectAction(e) {
+      let _this = this;
+      let action = e.detail.name;
+      switch(action) {
+        case '返回编辑':
+          _this.backToEdit();
+          break;
+        case '保存并退出':
+          _this.saveAndBack();
+          break;
+        default: break;
+      }
+    },
+    // 点击【返回】按钮 - 选择【取消】
+    cancelAction() {
+      this.setData({ showActionSheet: false });
+    },
+    onCloseActionSheet() {
+      this.setData({ showActionSheet: false });
+    },
+    // 点击【返回】按钮 - 选择【返回编辑】
+    backToEdit() {
+      this.setData({ showActionSheet: false });
+    },
+    // 点击【返回】按钮 - 选择【保存并退出】
+    saveAndBack() {
+      switch (this.data.scene) {
+        case 3:
+          this.saveAndBackInS3();
+          break;
+        case 4:
+          this.saveAndBackInS4();
+          break;
+        default: break;
+      }
+    },
+    // 在添加新笔记场景中选择【保存并退出】
+    saveAndBackInS3() {
+      let note = {
+        title: this.data.titleText,
+        body: this.data.bodyText,
+        belong: this.data.belong,
+        time: new Date().getTime()
+      };
+      notesCollection.add({
+        data: note
+      }).then(res => {
+        this.needRefresh();
+        this.setData({ needSaveDraft: false });
+        Draft.deleteDraftInS3();
+        wx.navigateBack().then(res => { // 返回笔记列表页
+          // console.log("通过按钮卸载");
+          // Draft.backToIndexPageByBtn();
+          wx.showToast({
+            title: '笔记保存成功',
+            icon: 'none',
+            duration: 1000
+          })
+        })
+      })
+    },
+    // 在编辑旧笔记场景中选择【保存并退出】
+    saveAndBackInS4() {
+      let _this = this;
+      let noteId = _this.data.noteId;
+      notesCollection.doc(noteId).update({
+        data: {
+          title: _this.data.titleText, 
+          body: _this.data.bodyText
+        }
+      }).then(res => {
+        this.needRefresh();
+        this.setData({ needSaveDraft: false });
+        Draft.deleteDraftInS4();
+        wx.navigateBack().then(res => { // 返回笔记列表页
+          // console.log("通过按钮卸载");
+          // Draft.backToIndexPageByBtn();
+          wx.showToast({
+            title: '笔记保存成功',
+            icon: 'none',
+            duration: 1000
+          })
+        })
+      })
+    },
+    // 点击【保存】按钮
+    onClickSaveBtn() {
+      if(this.checkNullContent()) {
+        wx.showToast({
+          title: '内容不能为空',
+          icon: 'error',
+          duration: 1000
+        })
+      }else {
+        this.setData({ showDialog: true });
+      }
+    },
+    // 点击【保存】按钮 - 选择【取消】
+    cancelSave() {
+      this.setData({ showDialog: false });
+    },
+    // 点击【保存】按钮 - 选择【保存】
+    confirmSave() {
+      switch (this.data.scene) {
+        case 3:
+          this.confirmSaveInS3();
+          break;
+        case 4:
+          this.confirmSaveInS4();
+          break;
+        default: break;
+      }
+    },
+    // 在添加新笔记场景中点击【保存】按钮 - 选择【保存】
+    confirmSaveInS3() {
+      this.saveAndBackInS3(); // 逻辑相同
+    },
+    // 在编辑旧笔记场景中点击【保存】按钮 - 选择【保存】
+    confirmSaveInS4() {
+      this.saveAndBackInS4(); // 逻辑相同
+    },
+    // 检查笔记内容是否全为空
+    checkNullContent() {
+      let title = this.data.titleText;
+      let body = this.data.bodyText;
+      return Text_Handler.checkSpace(title) && Text_Handler.checkSpace(body);
+    },
+    // 将微信切入后台或点击右上角胶囊按钮会触发 onHide
+    onHide() {
+      console.log("页面隐藏")
+    },
+    // 右滑返回上级页面会触发 onUnload
+    onUnload() {
+      console.log("通过其他卸载");
+      // this.needRefresh();
+      if(this.data.needSaveDraft) {
+        switch(this.data.scene) {
+          case 3: 
+            const eventChannel_S3 = this.getOpenerEventChannel();
+            eventChannel_S3.emit('acceptDraftInS3', {title: this.data.titleText, body: this.data.bodyText});
+            break;
+          case 4:
+            const eventChannel_S4 = this.getOpenerEventChannel();
+            eventChannel_S4.emit('acceptDraftInS4', {title: this.data.titleText, body: this.data.bodyText});
+            break;
+          default: break;
+        }
+      }
+      console.log("页面卸载")
+    },
+    // 当保存笔记成功后修改刷新上一级页面
+    needRefresh() {
+      let pages = getCurrentPages();
+      let indexPage = pages[0]; // 笔记列表页
+      console.log(indexPage)
+      indexPage.setData({
+        needRefresh: true,
+      })
     }
-
   },
-
-  cancelSave() {
-    this.setData({
-      showDialog: false
-    })
-  },
-
-  onDialogClose() {
-    console.log("dialog关闭")
-  },
-
-  copyTitle() {
-    var data = this.data.titleText;
-    wx.setClipboardData({
-      data: data,
-      success (res) {
-        wx.showToast({
-          title: '已复制到剪贴板',
-          icon: 'none',
-          duration: 800
-        })
-      }
-    })
-  },
-
-  copyBody() {
-    let char = unescape("\u3164");
-    let data = this.data.bodyText;
-    let data_str = JSON.stringify(data);
-    let new_data_str = data_str.replace(/\\n\\n/g, "\\n"+char+"\\n");
-    wx.setClipboardData({
-      data: JSON.parse(new_data_str),
-      success (res) {
-        wx.showToast({
-          title: '已复制到剪贴板',
-          icon: 'none',
-          duration: 800
-        })
-      }
-    })
-  },
-
-  previewNote() {
-    let _this = this;
-    let note = {
-      title: _this.data.titleText,
-      body: _this.data.bodyText
-    };
-    let note_str = JSON.stringify(note);
-    wx.navigateTo({
-      url: '../preview/preview?note=' + encodeURIComponent(note_str),
-    })
-  },
-  touchStrat(e) {
-    console.log(e);
-    console.log(e.changedTouches[0].pageX);
-    this.setData({ x: e.changedTouches[0].pageX });
-  },
-  touchMove(e) {
-    console.log(e);
-    let _this = this;
-    let x = e.changedTouches[0].pageX;
-    let dif = x - this.data.x;
-    let animation = wx.createAnimation({
-      delay: 400,
-      timingFunction: 'linear'
-    })
-    animation.translateX(dif).step();
-    this.setData({
-      animationData: animation.export(),
-      left: _this.data.left + dif,
-      x: x
-    });
-  },
-  touchEnd(e) {
-    console.log(e);
-    let _this = this;
-    let x = e.changedTouches[0].pageX;
-    let dif = x - this.data.x;
-    let animation = wx.createAnimation({
-      delay: 400,
-      timingFunction: 'linear'
-    })
-    animation.translateX(dif).step();
-    this.setData({
-      animationData: animation.export(),
-      left: _this.data.left + dif
-    });
-  },
-  tap() {
-    console.log("点击");
-  },
-
-  onShareAppMessage() {
-
+  observers: {
+    'titleText': function(titleText) {
+      const platform = getApp().globalData.platform;
+      let count = Text_Handler.getTitleWordCount_redbook(platform, titleText);
+      this.setData({ titleTextWordCount: count });
+    },
+    'bodyText': function(bodyText) {
+      const platform = getApp().globalData.platform;
+      let count = Text_Handler.getBodyWordCount_redbook(platform, bodyText);
+      this.setData({ bodyTextWordCount: count });
+    }
   }
 })

@@ -1,0 +1,11 @@
+<view class="top-area" style="background: {{background}};">
+  <view class="status-bar" style="height: {{statusBarHeight}}px;"></view>
+  <view class="nav-bar" style="height:{{navBarHeight}}px;" bind:tap="handleDoubleTap">
+    <view class="nav-bar-left-btn" hover-class="nav-bar-left-btn_hover" catch:tap="onClickLeftBtn">
+      <image class="nav-bar-left-btn-icon" src="{{icon}}"></image>
+    </view>
+    <view class="nav-bar-title" wx:if="{{hasMidTitle}}">{{title}}</view>
+    <slot name="mid" wx:else></slot>
+  </view>
+</view>
+<view class="top-area-sub" style="height: {{statusBarHeight + navBarHeight}}px; background: {{background}};"></view>  

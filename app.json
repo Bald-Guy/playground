@@ -1,10 +1,12 @@
 {
     "pages": [
-
         "pages/index/index",
         "pages/note/note",
         "pages/emoji/emoji",
         "pages/preview/preview",
+        "pages/filter/filter",
+        "pages/set/set",
+        "pages/account/account",
         "pages/playground/playground"
     ],
     "window": {

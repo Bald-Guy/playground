@@ -1,19 +1,22 @@
 /* pages/note/note.wxss */
+@import '../emoji/emoji.wxss';
 page {
-  /* background-color: #f8f8f8; */
+  background-color: #ffffff;
 }
 .title-area {
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 686rpx;
-  margin: 50rpx auto 0;
+  margin: 0 auto;
+  padding-top: 50rpx;
 }
 .title-input {
   flex: 1;
+  height: 28px;
   font-size: 18px;
   font-weight: 600;
-  line-height: 56rpx;
+  line-height: 28px;
   color: #333333;
 }
 .title-placeholder {
@@ -21,25 +24,28 @@ page {
   font-weight: normal;
   color: #cacaca;
 }
+/* title的editor样式 */
+.ql-container_title {
+  height: 56rpx;
+  min-height: 56rpx;
+}
+.ql-container_title .ql-editor {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+ /* 更改title-editor的placeholder样式 */
+.ql-container_title .ql-blank::before {
+  font-style: normal;
+  font-size: 16px;
+  font-weight: normal;
+  color: #cacaca;
+}
 .title-left-num {
   margin-left: 8rpx;
   font-size: 12px;
-  color: #828282;
-}
-.cover-item {
-  width: 40px;
-  height: 40px;
-  margin-left: 20px;
-  background-color: #E9F6EA;
-}
-.cover-item2 {
-  width: 40px;
-  height: 40px;
-  margin-left: 20px;
-  background-color: #85A988;
 }
 .line {
-  margin: 24rpx auto 32rpx;
+  margin: 12px auto 16px;
   width: 686rpx;
   height: 1rpx;
   background-color: #dfdfdf;
@@ -54,7 +60,7 @@ page {
 }
 .body-text {
   width: 100%;
-  height: 600rpx;
+  font-family: 'Apple Color Emoji';
   /* background-color: #dfdfdf; */
 }
 .body-placeholder {
@@ -69,16 +75,100 @@ page {
   letter-spacing: 0.4px;
   color: #989898;
 }
-/* 表情工具栏 */
-group-title-container {
-  
+/* 文本工具栏 */
+.tool-bar-border-top {
+  width: 100%;
+  height: 2rpx;
+  background-color: #f4f4f4;
 }
-.group-title-item {
-  width: 400rpx;
-  height: 60px;
-  border: 1px red solid;
-  flex-shrink: 0;
-  position: relative;
+.tool-bar {
+  width: 100%;
+  height: 80rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: #f9f9f9;
+  /* box-shadow: 0px -4px 10px rgba(172, 172, 172, 0.25); */
+}
+.tool-item {
+  width: 116rpx;
+  height: 52rpx;
+  margin-left: 20rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8rpx;
+  background-color: #f0f0f0;
+}
+.tool-icon {
+  width: 36rpx;
+  height: 36rpx;
+}
+.tool-name {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 36rpx;
+  color: #333333;
+}
+.vertical-line {
+  width: 2rpx;
+  height: 40rpx;
+  background-color: #bcbcbc;
+}
+.fold-keyboard-btn {
+  width: 52rpx;
+  height: 52rpx;
+  margin: 0 20rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.fold-keyboard-icon {
+  width: 52rpx;
+  height: 52rpx;
+}
+/* 表情工具栏 */
+.scroll-view-container {
+  padding: 0 10px;
+  width: 100%;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+.emoji-group-title-container {
+  width: 100%;
+  white-space: nowrap;
+}
+.emoji-group-title-item {
+  max-width: 180rpx;
+  height: 48rpx;
+  display: inline-block;
+  padding: 0 24rpx;
+  margin-right: 10px;
+  font-size: 14px;
+  line-height: 48rpx;
+  color: #424242;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  white-space: nowrap;
+  border-radius: 24px;
+  background-color: #ededed;
+}
+.emoji-group-title-item-active {
+  max-width: 180rpx;
+  height: 48rpx;
+  display: inline-block;
+  padding: 0 24rpx;
+  margin-right: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333333;
+  line-height: 48rpx;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  white-space: nowrap;
+  border-radius: 24px;
+  background-color: #d7d7d7;
 }
 /* 底部区域 */
 .bottom-area {
@@ -96,13 +186,13 @@ group-title-container {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  width: 88rpx;
-  height: 88rpx;
+  width: 44px;
+  height: 44px;
 }
 .btn-icon {
-  width: 48rpx;
-  height: 48rpx;
-  border-radius: 24rpx;
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
   background-color: #f7f7f7;
 }
 .btn-txt {
@@ -111,13 +201,13 @@ group-title-container {
   color: #989898;
 }
 .preview-btn {
-  width: 350rpx;
-  height: 88rpx;
-  border-radius: 44rpx;
+  width: 260rpx;
+  height: 44px;
+  border-radius: 22px;
   background-color: #E93F49;
   text-align: center;
   font-weight: 500;
-  font-size: 18px;
-  line-height: 88rpx;
+  font-size: 16px;
+  line-height: 44px;
   color: #FFFFFF;
 }

@@ -1,9 +1,13 @@
 {
   "usingComponents": {
-    "van-popup": "/components/miniprogram_npm/@vant/weapp/popup/index",
-    "van-action-sheet": "/components/miniprogram_npm/@vant/weapp/action-sheet/index",
-    "van-dialog": "/components/miniprogram_npm/@vant/weapp/dialog/index"
+    "nav-bar": "/components/reditor/navigation-bar/index",
+    "side-bar": "/components/reditor/side-bar/index",
+    "note-view": "/components/reditor/view/note-view",
+    "search-view": "/components/reditor/view/search-view",
+    "trash-view": "/components/reditor/view/trash-view",
+    "group-view": "/components/reditor/view/group-view"
   },
   "navigationStyle": "custom",
-  "backgroundColor": "#f9f9f9"
+  "backgroundColor": "#f9f9f9",
+  "disableScroll": true
 }

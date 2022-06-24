@@ -1,0 +1,18 @@
+/* components/reditor/search-bar/search-bar.wxss */
+/* 搜索框 */
+.search-container {
+  padding-left: 20rpx;
+  padding-right: 20rpx;
+}
+.search-bar {
+  padding-left: 10px;
+  background: #fff;
+  box-shadow: 0px 10px 20px rgba(221, 221, 221, 0.25);
+  border-radius: 16rpx;
+}
+.search-input {
+  font-size: 14px;
+}
+.search-input-placeholder {
+  color: #b1b1b1;
+}

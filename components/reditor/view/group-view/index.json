@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "reditor-scroll-view": "/components/reditor/reditor-scroll-view",
+    "note-card": "/components/reditor/card/note-card",
+    "note-action-sheet": "/components/reditor/action-sheet/note-action-sheet"
+  }
+}

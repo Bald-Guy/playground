@@ -1,0 +1,29 @@
+<!--components/reditor/reditor-scroll-view/index.wxml-->
+<import src="/templates/loading/index"/>
+<scroll-view 
+  class="note-list-container" 
+  style="height: {{scrollViewHeight}}px;"
+  scroll-y
+  scroll-top="{{scrollTop}}"
+  enable-back-to-top="{{true}}"
+  scroll-with-animation="{{true}}"
+  lower-threshold="80"
+  refresher-enabled="{{enabled}}"
+  refresher-threshold="{{100}}"
+  refresher-default-style="black"
+  refresher-background="#f9f9f9"
+  refresher-triggered="{{triggered}}"
+  bindrefresherpulling="onPulling"
+  bindrefresherrefresh="onRefresh"
+  bindrefresherrestore="onRestore"
+  bindrefresherabort="onAbort"
+  bindscrolltolower="reachBottom"
+>
+  <slot></slot>
+  <!-- 加载动画 -->
+  <view class="loading-container" hidden="{{!showLoading}}">
+    <template is="loading"></template>
+  </view>
+  <!-- 占位块 -->
+  <view class="empty-block" style="height: {{emptyBlockHeight}}rpx;"></view>
+</scroll-view>

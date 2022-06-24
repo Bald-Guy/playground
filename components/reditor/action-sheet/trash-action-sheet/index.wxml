@@ -1,0 +1,28 @@
+<!--components/reditor/action-sheet/trash-action-sheet/index.wxml-->
+<!-- 是否恢复废纸篓中的笔记 -->
+<van-action-sheet
+  show="{{ show }}"
+  z-index="300"
+  actions="{{ actions }}"
+  cancel-text="取消"
+  bind:select="selectAction"
+  bind:cancel="cancelAction"
+  bind:close="onCloseActionSheet"
+/>
+
+<!-- 是否彻底删除笔记 -->
+<van-dialog
+  use-slot
+  width="280"
+  title="确认彻底删除该笔记吗?"
+  confirmButtonText="彻底删除"
+  confirm-button-color="#E93F49"
+  transition="fade"
+  show="{{ showDeleteDialog }}"
+  show-cancel-button
+  bind:confirm="confirmDelete"
+  bind:cancel="cancelDelete"
+  bind:close="onCloseDeleteDialog"
+>
+  <view style="height:20px"></view>
+</van-dialog>

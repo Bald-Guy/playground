@@ -86,3 +86,30 @@
     </view>
   </view>
 </van-popup>
+
+
+<van-dialog
+  use-slot
+  width="280"
+  title="确认删除该分组吗?"
+  confirmButtonText="删除"
+  confirm-button-color="#E93F49"
+  transition="fade"
+  show="{{ showGroupDialog }}"
+  show-cancel-button
+  bind:confirm="confirmDeleteGroup"
+  bind:cancel="cancelDeleteGroup"
+  bind:close="onGroupDialogClose"
+>
+  <view style="height:20px"></view>
+</van-dialog>
+
+<van-action-sheet
+  show="{{ showActionSheet }}"
+  z-index="300"
+  actions="{{ actions }}"
+  cancel-text="取消"
+  bind:select="selectAction"
+  bind:cancel="cancelAction"
+  bind:close="onCloseActionSheet"
+/>

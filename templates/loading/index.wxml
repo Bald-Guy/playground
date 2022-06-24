@@ -1,0 +1,12 @@
+<template name="loading">
+  <view class="box animation">
+    <view class="dot"></view>
+    <view class="dot"></view>
+    <view class="dot"></view>
+    <view class="dot"></view>
+    <view class="dot"></view>
+    <view class="dot"></view>
+    <view class="dot"></view>
+    <view class="dot"></view>
+  </view>
+</template>

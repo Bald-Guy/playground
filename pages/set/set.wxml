@@ -1,0 +1,22 @@
+<!--pages/set/set.wxml-->
+<nav-bar class="nav-bar" icon="/images/back-icon.png" hasMidTitle="{{true}}" title="设置" background="#f8f8f8" bind:click-left="onClickBackBtn"></nav-bar>
+<view class="set-item" bindtap="toSetAccount">
+  <image class="set-icon" src="/images/set/account.png"></image>
+  <view class="set-text">账号详情</view>
+  <view style="flex: 1;"></view>
+  <image class="to-set-icon" src="/images/back-icon.png"></image>
+</view>
+
+<picker bindchange="setMobileSystem" value="{{index}}" range="{{systems}}">
+  <view class="set-item">
+    <image class="set-icon" src="/images/set/phone.png"></image>
+    <view class="set-text">移动设备</view>
+    <view style="flex: 1;"></view>
+      <view class="set-desc">{{systems[index]}}</view>
+    <image class="to-set-icon" src="/images/back-icon.png"></image>
+  </view>
+</picker>
+
+<view class="version-info" style="bottom: {{bottomSafeHeight + 18}}px;">Version 1.1.2</view>
+
+

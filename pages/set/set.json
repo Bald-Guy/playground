@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "nav-bar": "/components/reditor/navigation-bar/index"
+  },
+  "backgroundColor": "#f8f8f8",
+  "navigationStyle": "custom"
+}
